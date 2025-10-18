@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Canım Annem • Menü</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg1:#2A0114;--bg2:#3D0220;--edge:#FF9AD1;--txt:#FFE9F6;--dust:#E4B3FF}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;background:radial-gradient(120% 120% at 50% 40%,var(--bg1),var(--bg2));color:var(--txt);overflow-x:hidden;font-family:"Cinzel",Georgia,serif}
+#dust{position:fixed;inset:0;z-index:0}
+.p{position:absolute;width:3px;height:3px;border-radius:50%;background:var(--dust);opacity:.65;mix-blend-mode:screen}
+.header{text-align:center;padding:24px 16px 12px;font-size:clamp(30px,8vw,46px);font-weight:900;text-shadow:0 0 8px #0007,0 2px 0 #0005}
+.grid{display:grid;gap:16px;grid-template-columns:repeat(2,1fr);max-width:1000px;margin:0 auto;padding:20px}
+.card{display:grid;place-items:center;text-align:center;padding:26px 12px;min-height:132px;border:2px solid #ffffff1f;border-radius:18px;color:var(--txt);text-decoration:none;background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));box-shadow:0 6px 22px rgba(0,0,0,.35),inset 0 0 0 1px #ffffff12;backdrop-filter:blur(2px);transition:transform .15s ease,box-shadow .15s ease,border-color .15s;font-weight:900;letter-spacing:.02em;font-size:clamp(18px,4.8vw,26px)}
+.card small{display:block;margin-top:8px;font-weight:700;opacity:.9;font-size:clamp(12px,3.2vw,16px)}
+.card:hover{transform:translateY(-2px);border-color:var(--edge);box-shadow:0 8px 28px rgba(0,0,0,.5),0 0 18px #ff9ad155}
+.card.wide{grid-column:1/-1}
+.footer{text-align:center;opacity:.7;padding:12px;font-weight:700}
+</style>
+</head>
+<body>
+<div id="dust"></div>
+<h1 class="header">💖 ANA MENÜ 💖</h1>
+<div class="grid">
+  <a href="#" class="card">📸 Anılar<small>Zaman yolculuğu</small></a>
+  <a href="#" class="card">🍰 Tarifler<small>Lezzet defteri</small></a>
+  <a href="#" class="card">📝 Notlarım<small>Sana yazdıklarım</small></a>
+  <a href="#" class="card">🌹 Bugün Mesaj<small>Bir tebessüm</small></a>
+  <a href="#" class="card wide">ℹ️ Hakkında<small>Küçük hediye</small></a>
+</div>
+<p class="footer">© Canım Annem</p>
+<script>
+(function(){
+  const host=document.getElementById('dust'),N=80;
+  for(let i=0;i<N;i++){
+    const d=document.createElement('div');d.className='p';
+    d.style.left=Math.random()*100+'vw';d.style.top=Math.random()*100+'vh';
+    host.appendChild(d);
+    const dx=(Math.random()*60-30),dy=(Math.random()*60-30),t=12+Math.random()*14;
+    d.animate([{transform:'translate(0,0)'},{transform:`translate(${dx}px,${dy}px)`}],
+      {duration:t*1000,direction:'alternate',iterations:Infinity,easing:'ease-in-out'});
+  }
+})();
+</script>
+</body>
+</html>
