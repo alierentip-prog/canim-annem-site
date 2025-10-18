@@ -13,72 +13,59 @@
   --card-border:#ff9ec6;
   --text:#ffeef6;
 }
-html,body{
-  margin:0;height:100%;overflow:hidden;
-  font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--text);
-}
-body{
-  background:var(--intro-bg);
-  transition: background 3s ease; /* <-- yavaş, belirgin geçiş */
-}
+html,body{margin:0;height:100%;overflow:hidden;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--text)}
+body{background:var(--intro-bg);transition:background 3s ease}
 
-/* ekranlar */
+/* ortak */
 .screen{position:fixed; inset:0; display:none; align-items:center; justify-content:center}
 .show{display:flex}
 
-/* giriş */
-#welcome h1{
-  margin:0;font-size:clamp(36px,8vw,60px);color:#a60044;text-shadow:0 2px 8px rgba(0,0,0,.18);
-  animation:fadeOut 3s 2s forwards
-}
+/* 0) giriş */
+#welcome h1{margin:0;font-size:clamp(36px,8vw,60px);color:#a60044;text-shadow:0 2px 8px rgba(0,0,0,.18);animation:fadeOut 3s 2s forwards}
 @keyframes fadeOut{to{opacity:0;visibility:hidden}}
 
-/* mektup */
-.envelope{
-  width:min(82vw,340px);height:min(58vw,220px);
-  background:#fff;border:3px solid #a60044;border-radius:14px;
-  box-shadow:0 10px 40px rgba(0,0,0,.22);cursor:pointer
-}
+/* 1) mektup */
+.envelope{width:min(82vw,340px);height:min(58vw,220px);background:#fff;border:3px solid #a60044;border-radius:14px;box-shadow:0 10px 40px rgba(0,0,0,.22);cursor:pointer}
 
-/* sinematik yazı */
+/* 2) satır satır büyük yazı */
 #scrollScreen{position:relative}
 #scrollScreen::before{
-  content:"";position:absolute;inset:0;z-index:0; /* arkaya al */
-  background:
-    radial-gradient(120% 80% at 50% -10%, transparent 60%, rgba(0,0,0,.35) 100%),
-    linear-gradient(90deg, rgba(0,0,0,.6), transparent 18%, transparent 82%, rgba(0,0,0,.6));
+  content:"";position:absolute;inset:0;z-index:0;
+  background:radial-gradient(120% 80% at 50% -10%, transparent 60%, rgba(0,0,0,.35) 100%),
+             linear-gradient(90deg, rgba(0,0,0,.55), transparent 18%, transparent 82%, rgba(0,0,0,.55));
   pointer-events:none;
 }
-.scrollText{
-  position:absolute; left:50%; transform:translateX(-50%); bottom:-120%;
-  width:min(92vw, 900px); text-align:center; line-height:1.28;
-  font-weight:900; letter-spacing:.4px; color:#fff; z-index:2; /* öne al */
-  text-shadow:0 5px 14px rgba(0,0,0,.75);
-  font-size: clamp(36px, 8.5vw, 88px);
-  /* animasyonu js başlatacak */
+#lineHolder{
+  position:relative; z-index:2; text-align:center; width:100%;
+  display:flex; align-items:center; justify-content:center;
+  padding:0 4vw;
 }
-@keyframes scrollUp{ from{ bottom:-120% } to{ bottom:130% } }
+.line{
+  position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+  width:92vw; max-width:1000px; line-height:1.18; letter-spacing:.4px;
+  font-weight:900; color:#fff; text-shadow:0 6px 18px rgba(0,0,0,.75);
+  font-size:clamp(38px, 9vw, 92px);
+  opacity:0;
+}
+@keyframes appear {
+  0%{opacity:0; transform:translate(-50%,-52%)}
+  15%{opacity:1; transform:translate(-50%,-50%)}
+  85%{opacity:1}
+  100%{opacity:0; transform:translate(-50%,-48%)}
+}
 
-/* ana menü 2-2-1 düzen */
+/* 3) ana menü 2-2-1 */
 #menu{flex-direction:column;gap:18px;text-align:center;padding:14px}
 #menu h2{margin:0 0 8px;font-size:clamp(34px,8vw,64px);color:#ffd6ea;text-shadow:0 3px 14px rgba(0,0,0,.5)}
-.tiles{
-  display:grid; gap:18px; width:94%; max-width:1200px; margin:0 auto;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-}
-.tile{
-  min-height:190px; border:3px solid var(--card-border); border-radius:24px;
-  background:var(--card-grad); box-shadow:0 18px 48px rgba(255,120,180,.18), inset 0 0 0 1px rgba(255,255,255,.05);
-  color:#ffeef6; display:flex; flex-direction:column; align-items:center; justify-content:center;
-  text-decoration:none; transition:transform .2s ease;
-}
+.tiles{display:grid;gap:18px;width:94%;max-width:1200px;margin:0 auto;grid-template-columns:repeat(2,minmax(0,1fr))}
+.tile{min-height:190px;border:3px solid var(--card-border);border-radius:24px;background:var(--card-grad);box-shadow:0 18px 48px rgba(255,120,180,.18),inset 0 0 0 1px rgba(255,255,255,.05);color:#ffeef6;display:flex;flex-direction:column;align-items:center;justify-content:center;text-decoration:none;transition:transform .2s}
 .tile:active{transform:scale(.98)}
 .big{font-size:clamp(28px,7.2vw,44px);font-weight:900;letter-spacing:.5px}
 .small{font-size:clamp(16px,4.6vw,22px);opacity:.95;margin-top:8px}
-.tile.wide{grid-column:1 / -1; max-width:720px; justify-self:center}
+.tile.wide{grid-column:1/-1;max-width:720px;justify-self:center}
 
-/* sayfa iskeleti */
-.page{position:fixed; inset:0; display:none; background:var(--menu-bg); z-index:21}
+/* alt sayfalar */
+.page{position:fixed;inset:0;display:none;background:var(--menu-bg);z-index:21}
 .page.show{display:block}
 .page header{display:flex;align-items:center;gap:10px;padding:14px}
 .back{border:none;background:#fff;color:#a60044;border:2px solid #a60044;border-radius:999px;padding:10px 14px;font-weight:800;font-size:clamp(16px,4.8vw,20px)}
@@ -99,9 +86,9 @@ body{
   <div id="envelope" class="envelope" title="Dokun açmak için"></div>
 </section>
 
-<!-- 2) Sinematik yazı -->
+<!-- 2) Satır satır yazı -->
 <section id="scrollScreen" class="screen">
-  <div id="scrollText" class="scrollText"></div>
+  <div id="lineHolder"></div>
 </section>
 
 <!-- 3) Ana menü -->
@@ -144,11 +131,11 @@ const show = id => document.querySelectorAll('.screen').forEach(sc=>sc.classList
 const openPage = id => $('#'+id).classList.add('show');
 const closePages = () => document.querySelectorAll('.page.show').forEach(p=>p.classList.remove('show'));
 
-/* giriş → mektup */
+/* 0) intro → letter */
 setTimeout(()=>{ show('letterScreen'); }, 3000);
 
-/* mektup → sinematik (gradyent + animasyon başla) */
-const MESSAGE = [
+/* Yazı: tek tek büyük satırlar */
+const LINES = [
   "Anne…",
   "Gözlerin açılırken,",
   "dünya güneş bulur.",
@@ -163,29 +150,45 @@ const MESSAGE = [
   "yerinde adın var.",
   "Seni çok seviyorum. 💖"
 ];
+const LINE_MS = 1800; // her satır süresi
 
 $('#envelope').addEventListener('click', ()=>{
-  /* gradyenti koyu sinematik yap */
-  document.body.style.background = getComputedStyle(document.documentElement).getPropertyValue('--scroll-bg');
+  // 1) arka plan yavaşça koyuya geçsin
+  document.body.style.background =
+    getComputedStyle(document.documentElement).getPropertyValue('--scroll-bg');
 
+  // 2) yazı ekranını göster
   show('scrollScreen');
 
-  /* --- ANİMASYONU ELLE BAŞLAT (kesin çözüm) --- */
-  const st = $('#scrollText');
-  st.innerHTML = MESSAGE.map(l=>`<div>${l}</div>`).join('<br>');
-  st.style.animation = 'none';
-  st.offsetHeight;                 // reflow
-  st.style.animation = 'scrollUp 26s linear forwards';
-  /* -------------------------------------------- */
-
-  st.addEventListener('animationend', ()=>{
-    /* yazı bitince menü temasına 3sn'de geç */
-    document.body.style.background = getComputedStyle(document.documentElement).getPropertyValue('--menu-bg');
-    show('menu');
-    bindMenu();
-    fillTodayMessage();
-  }, {once:true});
+  // 3) 0.5 sn sonra satırlar başlasın (geçişin başladığı belli olsun)
+  setTimeout(runLines, 500);
 }, {passive:true});
+
+function runLines(){
+  const holder = $('#lineHolder');
+  holder.innerHTML = ""; // temizle
+  let i = 0;
+
+  const tick = () => {
+    if (i >= LINES.length){
+      // son satır bitti: menü temasına geç ve menüyü aç
+      document.body.style.background =
+        getComputedStyle(document.documentElement).getPropertyValue('--menu-bg');
+      show('menu');
+      bindMenu();
+      fillTodayMessage();
+      return;
+    }
+    const div = document.createElement('div');
+    div.className = 'line';
+    div.textContent = LINES[i++];
+    // animasyonu her seferinde taze başlat
+    div.style.animation = 'appear '+(LINE_MS/1000)+'s ease both';
+    holder.appendChild(div);
+    setTimeout(()=>{ holder.removeChild(div); tick(); }, LINE_MS);
+  };
+  tick();
+}
 
 /* menü */
 function bindMenu(){
