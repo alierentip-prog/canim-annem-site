@@ -6,256 +6,285 @@
 <title>Canım Annem 💐</title>
 <style>
   :root{
-    --rose:#a60044; --paper:#fff8f8; --shadow:rgba(0,0,0,.18);
-    --bg1:#fff0f6; --bg2:#ffd9e8; --bg3:#ffc4d6; --text:#3a0130;
-    --tile:#ffffff; --tileBorder:#ff9abe; --tileGlow:rgba(166,0,68,.25);
-    --accent:#ff4d8d;
+    --rose:#a60044; --rose-deep:#7b0033;
+    --bg1:#ffe6f2; --bg2:#ffd3e7; --bg3:#ffb3d2;
+    --menuTile:#ffffff; --menuBorder:#ff99c2; --menuGlow:rgba(255, 64, 129, .25);
+    --text:#300018;
   }
   *{box-sizing:border-box}
-  html,body{margin:0;height:100%;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--text);background:radial-gradient(circle at 30% 20%,var(--bg1),var(--bg2),var(--bg3));overflow-x:hidden}
+  html,body{margin:0;height:100%;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--text);background:radial-gradient(circle at 30% 20%,var(--bg1),var(--bg2),var(--bg3));overflow:hidden}
 
-  /* ---------- EKRANLAR ---------- */
+  /* Ekran katmanları */
   .screen{position:fixed; inset:0; display:none}
   .screen.show{display:block}
-  .center{display:flex;align-items:center;justify-content:center}
+  .center{display:flex; align-items:center; justify-content:center}
 
-  /* ---------- 0) Hoş geldin ---------- */
-  #scrWelcome{z-index:20}
-  .welcome-text{text-align:center; color:var(--rose); line-height:1.25}
-  .welcome-text h1{margin:0; font-size:clamp(28px,6vw,46px)}
-  .welcome-text p{margin:.6rem 0 0; font-size:clamp(18px,3.4vw,22px)}
-  .fadeOut{animation:fadeOut 3s ease forwards}
-  @keyframes fadeOut{0%{opacity:1}100%{opacity:0; visibility:hidden}}
+  /* 0) Hoş geldin */
+  #scrWelcome{z-index:30}
+  .welcome{ text-align:center; color:var(--rose); line-height:1.25 }
+  .welcome h1{ margin:0; font-size:clamp(30px,7vw,52px) }
+  .welcome p{ margin:.6rem 0 0; font-size:clamp(18px,4vw,26px) }
+  .fadeOut{ animation:fadeOut 3s ease forwards }
+  @keyframes fadeOut{ to{ opacity:0; visibility:hidden } }
 
-  /* ---------- 1) Zarf & Mektup ---------- */
-  #scrLetter{z-index:15}
-  .env-wrap{position:absolute; left:50%; top:52%; transform:translate(-50%,-50%); opacity:0; pointer-events:none}
-  .env-wrap.show{opacity:1; pointer-events:auto; transition:opacity .6s ease}
+  /* 1) Zarf ekranı */
+  #scrLetter{z-index:25}
+  .env-wrap{ height:100%; display:flex; align-items:center; justify-content:center }
   .envelope{
-    width:260px; height:160px; background:#fff; border:2px solid var(--rose); border-radius:14px;
-    box-shadow:0 12px 30px var(--shadow); position:relative; cursor:pointer;
-    transition:transform .9s cubic-bezier(.22,1,.36,1), opacity .6s;
+    width:min(70vw,360px); aspect-ratio:26/16; background:#fff; border:3px solid var(--rose); border-radius:16px;
+    box-shadow:0 16px 40px rgba(0,0,0,.18); position:relative; cursor:pointer; transition:transform .5s, opacity .5s;
   }
   .flap{
-    position:absolute; left:0; top:-80px; width:0; height:0;
-    border-left:130px solid transparent; border-right:130px solid transparent; border-bottom:80px solid #fff;
-    transform-origin:50% 100%; transition:transform .7s ease; filter:drop-shadow(0 6px 10px var(--shadow));
-  }
-  .envelope.open .flap{ transform:rotateX(180deg); }
-
-  .letter{
-    position:absolute; left:50%; top:58%; transform:translate(-50%,-50%) scale(.96);
-    width:min(560px,92vw); background:var(--paper); border:1px solid var(--rose); border-radius:14px;
-    box-shadow:0 12px 36px var(--shadow); padding:22px; display:none; z-index:9; text-align:left
-  }
-  .line{opacity:0; transform:translateY(18px); transition:all .6s}
-  .line.show{opacity:1; transform:translateY(0)}
-  .print-btn{
-    position:fixed; right:14px; bottom:14px; z-index:9; display:none;
-    background:#fff; color:var(--rose); border:1px solid var(--rose);
-    border-radius:999px; padding:10px 12px; box-shadow:0 8px 18px var(--shadow);
+    position:absolute; left:0; top:-40%; width:0; height:0;
+    border-left:50% solid transparent; border-right:50% solid transparent; border-bottom:40% solid #fff;
+    transform-origin:50% 100%; box-shadow:0 8px 16px rgba(0,0,0,.12);
   }
 
-  /* ---------- 2) ANA MENÜ ---------- */
-  #scrMenu{z-index:10; padding:18px; display:grid; grid-template-rows:auto 1fr}
-  .brand{font-weight:800; text-align:center; color:var(--rose); font-size:clamp(20px,4.4vw,28px)}
+  /* 2) Sinematik metin akışı */
+  #scrScroll{z-index:26; background:linear-gradient(180deg, #ffe1ee 0%, #ffd0e5 100%); display:flex; align-items:center; justify-content:center; }
+  /* Vinyet (yanları karart) */
+  #scrScroll::before{
+    content:""; position:absolute; inset:0;
+    background: radial-gradient(120% 80% at 50% -10%, transparent 55%, rgba(0,0,0,.25) 100%),
+                linear-gradient(90deg, rgba(0,0,0,.55), transparent 15%, transparent 85%, rgba(0,0,0,.55));
+    opacity:.85; pointer-events:none;
+  }
+  /* Pembe ton derinleşsin */
+  #scrScroll::after{
+    content:""; position:absolute; inset:0; background:linear-gradient(180deg, rgba(166,0,68,.08), transparent 40%);
+    pointer-events:none;
+  }
+
+  .scrollStage{ position:relative; width:min(900px, 92vw); height:min(86vh, 100dvh); overflow:hidden; border-radius:24px;
+    background:rgba(255,255,255,.12); box-shadow:0 20px 60px rgba(0,0,0,.25), inset 0 0 0 2px rgba(255,255,255,.3); }
+  .scrollText{
+    position:absolute; left:50%; transform:translateX(-50%); bottom:-100%;
+    width: min(90%, 780px);
+    text-align:center; line-height:1.25; color:#fff; text-shadow: 0 3px 8px rgba(0,0,0,.65);
+    font-weight:800; letter-spacing:.5px;
+  }
+  /* dev yazı — erişilebilir */
+  .line{ font-size: clamp(28px, 6.2vw, 64px); margin: 24px 0; }
+  /* küçük cihazda biraz daha sıkıştır */
+  @media (max-width:420px){ .line{ font-size: clamp(26px, 7.5vw, 56px); margin:18px 0 } }
+
+  /* 3) Ana menü */
+  #scrMenu{z-index:20; padding:18px; display:grid; grid-template-rows:auto 1fr }
+  .brand{ text-align:center; color:#fff; font-weight:900; text-shadow:0 2px 10px rgba(0,0,0,.35);
+          font-size:clamp(22px, 5vw, 32px); margin-top:8px }
   .tiles{
-    display:grid; gap:14px; margin-top:10px;
+    display:grid; gap:16px; margin-top:16px;
     grid-template-columns:repeat(2,minmax(0,1fr));
   }
-  @media (min-width:820px){ .tiles{grid-template-columns:repeat(3,minmax(0,1fr)); max-width:1024px; margin:20px auto 0} }
+  @media (min-width:860px){ .tiles{ grid-template-columns:repeat(3,minmax(0,1fr)); max-width:1100px; margin:20px auto 0 } }
   .tile{
     display:flex; flex-direction:column; align-items:center; justify-content:center;
-    min-height:140px; border:2px solid var(--tileBorder); background:var(--tile);
-    border-radius:18px; box-shadow:0 12px 28px var(--tileGlow);
-    text-decoration:none; color:var(--rose); position:relative; overflow:hidden;
-    transition:transform .25s ease, box-shadow .25s ease;
+    min-height:160px; border:3px solid var(--menuBorder); background:var(--menuTile);
+    border-radius:22px; box-shadow:0 16px 40px var(--menuGlow); text-decoration:none; color:var(--rose); position:relative; overflow:hidden;
+    transition:transform .2s ease, box-shadow .2s ease;
   }
-  .tile:active{transform:scale(.98)}
-  .tile .big{font-size:clamp(22px,4.6vw,28px); font-weight:800}
-  .tile .small{font-size:clamp(13px,2.6vw,15px); opacity:.8; margin-top:4px}
-  .tile::after{
-    content:""; position:absolute; inset:auto -50% -110% -50%;
-    background:radial-gradient(50% 50% at 50% 50%, rgba(255,77,141,.15), transparent 70%);
-    transform:translateY(0); animation:float 6s ease-in-out infinite;
-  }
-  @keyframes float{50%{transform:translateY(-16px)}}
+  .tile:active{ transform:scale(.98) }
+  .tile .big{ font-size:clamp(24px, 5.6vw, 36px); font-weight:900 }
+  .tile .small{ font-size:clamp(14px, 3.5vw, 18px); opacity:.9; margin-top:6px }
+  .sparkle{ position:absolute; inset:auto -40% -120% -40%;
+            background:radial-gradient(50% 50% at 50% 50%, rgba(255,64,129,.16), transparent 70%);
+            animation:float 7s ease-in-out infinite }
+  @keyframes float{ 50%{ transform:translateY(-18px) } }
 
-  /* ---------- 3) ALT SAYFALAR ---------- */
-  .page{position:fixed; inset:0; background:radial-gradient(circle at 70% 10%,var(--bg1),var(--bg2),var(--bg3)); display:none; z-index:11}
-  .page.show{display:block}
-  .page header{display:flex; align-items:center; gap:10px; padding:14px}
-  .back{border:none; background:#fff; color:var(--rose); border:1px solid var(--rose); border-radius:999px; padding:8px 12px; box-shadow:0 6px 16px var(--shadow)}
-  .page h2{margin:0 auto; color:var(--rose)}
-  .page .content{padding:12px 16px 24px; height:calc(100% - 64px); overflow:auto}
+  /* Alt sayfa iskeleti */
+  .page{ position:fixed; inset:0; display:none; background:linear-gradient(180deg,#ffd6ea,#ffe8f2); z-index:21 }
+  .page.show{ display:block }
+  .page header{ display:flex; align-items:center; gap:10px; padding:14px }
+  .back{ border:none; background:#fff; color:var(--rose); border:2px solid var(--rose); border-radius:999px; padding:10px 14px; font-weight:700; }
+  .page h2{ margin:0 auto; color:var(--rose); font-size:clamp(22px,5vw,30px) }
+  .page .content{ padding:16px 18px 28px; height:calc(100% - 64px); overflow:auto; font-size:clamp(18px, 3.8vw, 22px) }
 
-  /* geçişler */
-  .slideIn{animation:slideIn .45s both}
-  .slideOut{animation:slideOut .45s both}
-  @keyframes slideIn{from{transform:translateY(20px); opacity:0}to{transform:translateY(0); opacity:1}}
-  @keyframes slideOut{from{transform:translateY(0); opacity:1}to{transform:translateY(20px); opacity:0}}
+  /* Geçiş animleri */
+  .slideIn{ animation:slideIn .45s both }  .slideOut{ animation:slideOut .45s both }
+  @keyframes slideIn{ from{ transform:translateY(20px); opacity:0 } to{ transform:translateY(0); opacity:1 } }
+  @keyframes slideOut{ from{ transform:translateY(0); opacity:1 } to{ transform:translateY(20px); opacity:0 } }
 </style>
 </head>
 <body>
 
 <!-- 0) Hoş geldin -->
-<section id="scrWelcome" class="screen center">
-  <div class="welcome-text fadeOut">
+<section id="scrWelcome" class="screen center show">
+  <div class="welcome fadeOut">
     <h1>Canım Annem 🌷🌹</h1>
     <p>Hoş geldin 💐</p>
   </div>
 </section>
 
-<!-- 1) Zarf & mektup giriş animasyonu -->
+<!-- 1) Zarf -->
 <section id="scrLetter" class="screen">
-  <div id="envWrap" class="env-wrap center" style="width:100%; height:100%;">
+  <div class="env-wrap">
     <div id="envelope" class="envelope" title="Mektubu açmak için dokun">
       <div class="flap"></div>
     </div>
   </div>
-  <article id="letter" class="letter" aria-live="polite"></article>
-  <button id="btnPrint" class="print-btn" title="Yazdır 🖨️">🖨️</button>
 </section>
 
-<!-- 2) ANA MENÜ -->
+<!-- 2) Sinematik metin (tek parça scroll) -->
+<section id="scrScroll" class="screen">
+  <div class="scrollStage">
+    <div id="scrollText" class="scrollText"></div>
+  </div>
+</section>
+
+<!-- 3) Ana menü -->
 <section id="scrMenu" class="screen">
   <div class="brand">Sana küçük bir web hediyesi 💖</div>
   <div class="tiles">
-    <a class="tile" data-open="pg-anilar"><div class="big">📸 Anılar</div><div class="small">Birlikte zaman yolculuğu</div></a>
-    <a class="tile" data-open="pg-tarifler"><div class="big">🍰 Tarifler</div><div class="small">En güzel lezzetlerin</div></a>
-    <a class="tile" data-open="pg-notlar"><div class="big">💬 Notlarım</div><div class="small">Sana yazdıklarım</div></a>
-    <a class="tile" data-open="pg-muzik"><div class="big">🎵 Müzik Köşesi</div><div class="small">Ruhuna iyi gelsin</div></a>
-    <a class="tile" data-open="pg-bugun"><div class="big">🌹 Bugün İçin Mesaj</div><div class="small">Her gün bir tebessüm</div></a>
-    <a class="tile" data-open="pg-hakkinda"><div class="big">ℹ️ Hakkında</div><div class="small">Bu site nasıl doğdu</div></a>
+    <a class="tile" data-open="pg-anilar">
+      <div class="sparkle"></div>
+      <div class="big">📸 Anılar</div><div class="small">Birlikte zaman yolculuğu</div>
+    </a>
+    <a class="tile" data-open="pg-tarifler">
+      <div class="sparkle"></div>
+      <div class="big">🍰 Tarifler</div><div class="small">En güzel lezzetlerin</div>
+    </a>
+    <a class="tile" data-open="pg-notlar">
+      <div class="sparkle"></div>
+      <div class="big">💬 Notlarım</div><div class="small">Sana yazdıklarım</div>
+    </a>
+    <a class="tile" data-open="pg-muzik">
+      <div class="sparkle"></div>
+      <div class="big">🎵 Müzik</div><div class="small">Ruhuna iyi gelsin</div>
+    </a>
+    <a class="tile" data-open="pg-bugun">
+      <div class="sparkle"></div>
+      <div class="big">🌹 Bugün Mesaj</div><div class="small">Her gün bir tebessüm</div>
+    </a>
+    <a class="tile" data-open="pg-hakkinda">
+      <div class="sparkle"></div>
+      <div class="big">ℹ️ Hakkında</div><div class="small">Bu site nasıl doğdu</div>
+    </a>
   </div>
 </section>
 
-<!-- 3) ALT SAYFALAR (şimdilik placeholder; sonra dolduracağız) -->
+<!-- Alt sayfalar -->
 <section id="pg-anilar" class="page">
   <header><button class="back" data-back>← Geri</button><h2>📸 Anılar</h2></header>
-  <div class="content">
-    <p>Yakında buraya fotoğraf galerisi gelecek. Telefonda kolay yükleme ve albüm etkisi ekleyeceğiz.</p>
-  </div>
+  <div class="content">Yakında fotoğraf galerisi ekleyeceğiz.</div>
 </section>
-
 <section id="pg-tarifler" class="page">
   <header><button class="back" data-back>← Geri</button><h2>🍰 Tarifler</h2></header>
-  <div class="content">
-    <p>En sevdiğin tarifleri kartlar halinde ekleyeceğiz. Malzeme listesi + adım adım yapılışı.</p>
-  </div>
+  <div class="content">Favori tarifler burada olacak.</div>
 </section>
-
 <section id="pg-notlar" class="page">
   <header><button class="back" data-back>← Geri</button><h2>💬 Notlarım</h2></header>
-  <div class="content">
-    <p>Buraya sana yazdığım notlar gelecek. Yazı büyüklüğü büyük, okuması rahat.</p>
-  </div>
+  <div class="content">Sana yazdığım notlar…</div>
 </section>
-
 <section id="pg-muzik" class="page">
-  <header><button class="back" data-back>← Geri</button><h2>🎵 Müzik Köşesi</h2></header>
-  <div class="content">
-    <p>MP3 eklemek için küçük bir oynatıcı koyacağız. Seçtiğin şarkıyı arka plana alacağız.</p>
-  </div>
+  <header><button class="back" data-back>← Geri</button><h2>🎵 Müzik</h2></header>
+  <div class="content">MP3 ekleme alanı (sonraki adımda).</div>
 </section>
-
 <section id="pg-bugun" class="page">
   <header><button class="back" data-back>← Geri</button><h2>🌹 Bugün İçin Mesaj</h2></header>
   <div class="content" id="msgArea"></div>
 </section>
-
 <section id="pg-hakkinda" class="page">
   <header><button class="back" data-back>← Geri</button><h2>ℹ️ Hakkında</h2></header>
-  <div class="content">
-    <p>Bu site, “Canım Annem”e küçük bir sürpriz olarak hazırlandı. Her detay sevgiyle…</p>
-  </div>
+  <div class="content">Bu site “Canım Annem”e sevgiyle hazırlandı.</div>
 </section>
 
 <script>
-  /* ------- KÜÇÜK YARDIMCILAR ------- */
-  const $ = sel => document.querySelector(sel);
-  const showScreen = id => document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('show', s.id===id));
-  const openPage = id => { const el = $('#'+id); el.classList.add('show','slideIn'); setTimeout(()=>el.classList.remove('slideIn'),460); };
+  /* ===== Küçük yardımcılar ===== */
+  const $ = s => document.querySelector(s);
+  const show = id => document.querySelectorAll('.screen').forEach(sc=>sc.classList.toggle('show', sc.id===id));
+  const openPage = id => { const p = $('#'+id); p.classList.add('show','slideIn'); setTimeout(()=>p.classList.remove('slideIn'),460); };
   const closePages = () => document.querySelectorAll('.page.show').forEach(p=>{ p.classList.add('slideOut'); setTimeout(()=>{ p.classList.remove('slideOut','show'); }, 450); });
 
-  /* ------- 0) HOŞ GELDİN → ZARF ------- */
-  const scrWelcome = $('#scrWelcome');
-  const scrLetter  = $('#scrLetter');
-  const envWrap    = $('#envWrap');
-  const envelope   = $('#envelope');
-  const letter     = $('#letter');
-  const btnPrint   = $('#btnPrint');
+  // 0) 3 sn sonra zarfa geç
+  setTimeout(()=>{ show('scrLetter'); }, 3000);
 
-  // başta sadece welcome gözüksün
-  showScreen('scrWelcome');
-
-  setTimeout(()=>{
-    scrWelcome.style.display='none';
-    showScreen('scrLetter');
-    envWrap.classList.add('show'); // zarf görünür
-  }, 3000);
-
-  /* ------- 1) MEKTUP METNİ -------- */
-  const LINES = [
-    "Anne…",
-    "Gülüşün evimizin ışığı, sesin içimin huzuru.",
-    "Küçük bir çocukken olduğu gibi, bugün de kalbim seninle güç buluyor.",
-    "Her sabah “iyi ki varsın” diyerek başlıyorum güne.",
-    "Sevgin en güzel ilhamım, en güvenli limanım.",
-    "Seni çok ama çok seviyorum. 💖"
-  ];
-
-  // Zarf tıklanınca: kapağı aç, zarf uçsun, mektup gelsin
-  envelope.addEventListener('click', () => {
-    envelope.classList.add('open');
-    envelope.style.transform = 'translateY(-60vh)';
-    envelope.style.opacity   = '0';
-    setTimeout(()=>{ letter.style.display='block'; showLines(); }, 650);
+  // 1) Zarf → tıkla → hemen scroll sahnesine geç
+  $('#envelope').addEventListener('click', ()=>{
+    // zarfı anında yok et
+    $('#scrLetter').style.display='none';
+    // pembe ton derinleşsin diye scroll sahnesine geç
+    show('scrScroll');
+    // metni hazırla ve kaydır
+    startScroll();
   }, {passive:true});
 
-  function showLines(){
-    letter.innerHTML = '';
-    LINES.forEach((txt,i)=>{
-      const p = document.createElement('p');
+  /* ===== 2) METİN: her satır max 3–4 kelime, büyük ve ortalanmış ===== */
+  // Burayı dilediğin zaman değiştir (cümleleri normal yaz; JS satırlara böler)
+  const MESSAGE = `
+  Anne…
+  Gülüşün evimizin ışığı
+  sesin içimin huzuru.
+  Kalbim bugün de seninle güç buluyor.
+  Her sabah iyi ki varsın diyerek
+  başlıyorum güne.
+  Sevgin en güzel ilhamım
+  en güvenli limanım.
+  Seni çok ama çok seviyorum. 💖
+  `;
+
+  function splitToLines(text, maxWords=4){
+    // tüm kelimeleri sırayla satırlara doldur
+    const words = text.replace(/\s+/g,' ').trim().split(' ');
+    const lines = [];
+    let buf = [];
+    words.forEach(w=>{
+      if(!w) return;
+      buf.push(w);
+      if(buf.length>=maxWords){ lines.push(buf.join(' ')); buf=[]; }
+    });
+    if(buf.length) lines.push(buf.join(' '));
+    // çok uzun satırları da 20 karakterden sonra yumuşat
+    return lines.map(s => s.length>36 ? s.replace(/(.{1,18})(\s|$)/g, '$1\n').split('\n').filter(Boolean) : [s]).flat();
+  }
+
+  function startScroll(){
+    const container = $('#scrollText');
+    container.innerHTML = '';
+    // Satırları üret
+    const lines = splitToLines(MESSAGE, 4).filter(s=>s.trim());
+    lines.forEach(txt=>{
+      const p = document.createElement('div');
       p.className = 'line';
-      p.textContent = txt;
-      letter.appendChild(p);
-      setTimeout(()=>p.classList.add('show'), 600 + i*1600);
+      p.textContent = txt.trim();
+      container.appendChild(p);
     });
-    const total = 600 + LINES.length*1600;
-    setTimeout(()=>{ btnPrint.style.display='inline-block'; }, total);
-    // total + 1200ms sonra ana menüye geç
-    setTimeout(()=> goMenu(), total + 1200);
+
+    // Aşağıdan yukarı tek parça kaydır (satır satır değil)
+    const stage = $('.scrollStage');
+    const totalHeight = container.getBoundingClientRect().height;
+    const stageH = stage.getBoundingClientRect().height;
+
+    // başlangıç: tamamen sahnenin altından
+    container.style.bottom = (-totalHeight - 40) + 'px';
+
+    // hız: 60px/sn (satır çoksa süre artar)
+    const speed = 60; // px per second
+    const distance = totalHeight + stageH + 80; // aşağıdan girip üstten tamamen çıkana kadar
+    const duration = distance / speed; // sn
+
+    container.animate(
+      [{ transform:'translateX(-50%) translateY(0)' },
+       { transform:`translateX(-50%) translateY(-${distance}px)` }],
+      { duration: duration*1000, easing:'linear', fill:'forwards' }
+    ).finished.then(()=>{
+      // bitti → ana menü
+      show('scrMenu');
+      fillTodayMessage();
+      bindMenu();
+    });
   }
 
-  btnPrint.addEventListener('click', ()=> window.print());
-
-  /* ------- 2) ANA MENÜ ------- */
-  const scrMenu = $('#scrMenu');
-  function goMenu(){
-    // mektubu kapat
-    scrLetter.style.display='none';
-    // ana menüyü aç
-    showScreen('scrMenu');
-    // Bugün mesajını hazırla
-    fillTodayMessage();
-    // Menü tuşları tıklama
+  /* ===== 3) Ana menü davranışı ===== */
+  function bindMenu(){
     document.querySelectorAll('.tile').forEach(t=>{
-      t.addEventListener('click', ()=>{
-        const id = t.getAttribute('data-open');
-        openPage(id);
-      });
+      t.onclick = ()=> openPage(t.getAttribute('data-open'));
     });
-    // geri butonları
-    document.querySelectorAll('[data-back]').forEach(b=>{
-      b.addEventListener('click', closePages);
-    });
+    document.querySelectorAll('[data-back]').forEach(b=> b.onclick = closePages);
   }
 
-  /* ------- 3) Bugün İçin Mesaj ------- */
+  // Bugün için mesaj
   const QUOTES = [
     "Bir çiçeği güneş büyütür, beni sen büyüttün.",
-    "Kalbim sıkışınca adın geçer içimden: Anne.",
     "Duaların görünmez pelerinim gibi. İyi ki varsın.",
     "Gülüşün evime huzur, sözlerin yoluma ışık.",
     "Her güzel hatıramın içinde sen varsın.",
@@ -264,7 +293,7 @@
   function fillTodayMessage(){
     const el = $('#msgArea');
     const q = QUOTES[Math.floor(Math.random()*QUOTES.length)];
-    el.innerHTML = `<p style="font-size:1.2rem">${q}</p>`;
+    el.innerHTML = `<p style="font-size:clamp(20px,4.8vw,28px); font-weight:700">${q}</p>`;
   }
 </script>
 </body>
