@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Canım Annem 💐</title>
+<style>
+body {
+  margin: 0;
+  background: radial-gradient(circle, #ffe6f0, #ffccdd, #ff99bb);
+  font-family: 'Segoe UI', sans-serif;
+  overflow: hidden;
+  text-align: center;
+}
+
+.fade-text {
+  font-size: 2em;
+  color: #a60044;
+  font-weight: bold;
+  margin-top: 40vh;
+  animation: fadeOut 3s ease-in forwards;
+}
+
+@keyframes fadeOut {
+  0% {opacity: 1;}
+  100% {opacity: 0;}
+}
+
+.envelope {
+  opacity: 0;
+  position: relative;
+  width: 200px;
+  height: 120px;
+  background: #fff;
+  margin: 30vh auto;
+  border: 2px solid #a60044;
+  border-radius: 10px;
+  cursor: pointer;
+  animation: appear 1s ease-in 3s forwards;
+}
+
+.envelope::before {
+  content: '';
+  position: absolute;
+  top: -60px;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-left: 100px solid transparent;
+  border-right: 100px solid transparent;
+  border-bottom: 60px solid #fff;
+}
+
+@keyframes appear {
+  to {opacity: 1;}
+}
+
+.letter {
+  display: none;
+  background: #fff8f8;
+  border-radius: 10px;
+  border: 1px solid #a60044;
+  padding: 20px;
+  width: 80%;
+  max-width: 400px;
+  margin: 20vh auto;
+  font-size: 1.1em;
+  color: #4a0028;
+  line-height: 1.6em;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+</style>
+</head>
+<body>
+<div class="fade-text" id="welcome">Canım Annem 🌷🌹<br>Hoş geldin 💐</div>
+
+<div class="envelope" id="envelope"></div>
+
+<div class="letter" id="letter">
+  <p>Hayatıma kattığın her şey için teşekkür ederim... 💖<br>
+  Her sabah yüzümdeki tebessümün sebebisin.<br>
+  Senin sevgin en güzel ilhamım... 🌸<br>
+  İyi ki varsın, canım annem. 💌<br>
+  Seni çok ama çok seviyorum...</p>
+</div>
+
+<script>
+setTimeout(() => {
+  document.getElementById("welcome").style.display = "none";
+}, 3000);
+
+const envelope = document.getElementById("envelope");
+const letter = document.getElementById("letter");
+
+envelope.addEventListener("click", () => {
+  envelope.style.transition = "all 1s ease";
+  envelope.style.transform = "translateY(-300px)";
+  envelope.style.opacity = "0";
+  setTimeout(() => {
+    letter.style.display = "block";
+  }, 1000);
+});
+</script>
+</body>
+</html>
