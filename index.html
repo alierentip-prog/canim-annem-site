@@ -5,32 +5,36 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Canım Annem</title>
 <style>
-/* ---------- PALET ---------- */
+/* ======= PALET ======= */
 :root{
-  --bg:#150514;          /* koyu bordo */
-  --lav:#CDA6FF;         /* lila yazı */
+  --bg:#150514;          /* koyu bordo zemin */
+  --lav:#CDA6FF;         /* slayt yazı rengi */
   --lav-glow:#CDA6FF66;
-  --pink:#F7A3C4;        /* açık pembe */
+  --pink:#F7A3C4;        /* pembe yay */
   --pink2:#E782B0;       /* ikinci pembe */
-  --ring:#FFFFFF;
-  --card:#241024;        /* menü kartı */
-  --card-b:#3a1a3a;
+  --ring:#FFFFFF;        /* iç halka */
+  --panel:#1f0c1f;       /* panel gövde */
+  --panelTop:#2a122a;    /* panel başlık şeridi */
+  --panelStroke:#4a214a; /* panel çerçeve */
   --txt:#ffffff;
 }
 
-/* ---------- GENEL ---------- */
+/* ======= GENEL ======= */
 *{box-sizing:border-box}
 html,body{height:100%;margin:0;background:var(--bg);color:var(--txt);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial}
+section{background:transparent}
 button{cursor:pointer}
 .hidden{display:none!important}
+
+/* ortak ortalama */
 .center{position:absolute;inset:0;display:grid;place-items:center}
 
-/* ---------- BALONCUK CANVAS (logo sahnesi) ---------- */
-canvas#bubbles{position:absolute;inset:0;z-index:0;filter:blur(.2px)}
-
-/* ---------- LOGO SAHNESİ ---------- */
-#sceneLogo{position:absolute;inset:0}
+/* ======= LOGO SAHNESİ ======= */
+#sceneLogo{position:absolute;inset:0;overflow:hidden}
+canvas#bubbles{position:absolute;inset:0;z-index:0;background:transparent;filter:blur(.2px);pointer-events:none}
+.logoWrap{position:relative;display:grid;place-items:center;width:100%;height:100%}
 .logo{position:relative;width:min(84vmin,560px);aspect-ratio:1/1}
+
 svg{position:absolute;inset:0;width:100%;height:100%}
 .arc1{stroke:var(--pink); stroke-width:10; stroke-linecap:round; fill:none;
       stroke-dasharray: 320 1000; transform-origin:50% 50%;
@@ -44,14 +48,14 @@ svg{position:absolute;inset:0;width:100%;height:100%}
 
 .title{position:absolute;inset:0;display:grid;place-items:center;text-align:center;text-shadow:0 1px 0 #000,0 0 18px #ffffff80}
 .title h1{margin:0;line-height:1.05;font-weight:800;font-size:clamp(36px,7.8vmin,78px)}
-.title .gap{height:.25em}
+.title .gap{height:.28em}
 .flower{display:block;font-size:clamp(28px,5vmin,48px);margin-top:.15em}
 
 .star{position:absolute;width:22px;height:22px;color:#fff;opacity:.9;filter:drop-shadow(0 0 8px #ffffffaa)}
 .star:before,.star:after{content:"";position:absolute;inset:0;margin:auto;background:currentColor;transform-origin:center}
 .star:before{width:2px;height:100%;border-radius:2px}
 .star:after{height:2px;width:100%;border-radius:2px}
-.star.s1{top:20%;left:35%;animation:twinkle 1.6s ease-in-out infinite}
+.star.s1{top:22%;left:36%;animation:twinkle 1.6s ease-in-out infinite}
 .star.s2{bottom:24%;right:28%;animation:twinkle 2.1s ease-in-out .3s infinite}
 @keyframes twinkle{0%,100%{transform:scale(.6) rotate(0);opacity:.2}50%{transform:scale(1.35) rotate(45deg);opacity:1}}
 
@@ -59,7 +63,7 @@ svg{position:absolute;inset:0;width:100%;height:100%}
 .flash.run{animation:flash 900ms ease both}
 @keyframes flash{0%{opacity:0}35%{opacity:1}100%{opacity:0}}
 
-/* ---------- SLAYT SAHNESİ ---------- */
+/* ======= SLAYT SAHNESİ ======= */
 #sceneSlide{position:absolute;inset:0;overflow:hidden}
 .bgSpace{
   position:absolute;inset:0;z-index:0;
@@ -76,17 +80,18 @@ svg{position:absolute;inset:0;width:100%;height:100%}
   0%{background-position:0 0,0 0,0 0,0 0,0 0}
   100%{background-position:320px 240px,-280px 300px,260px -260px,-300px -360px,0 0}
 }
+/* güneş: sağ üst & küçük */
 .sun{
-  position:absolute; width:42vmin; aspect-ratio:1/1; border-radius:50%;
+  position:absolute; width:34vmin; aspect-ratio:1/1; border-radius:50%;
   background: radial-gradient(circle at 45% 45%, #fff8 0 20%, #fff0 60%),
               radial-gradient(circle, #fde7b8 0 30%, #f7d78f 45%, #a8843e00 70%);
-  filter:blur(0.2px);
-  right:8%; top:20%;
+  right:6%; top:10%;
   animation: orbit 42s ease-in-out infinite;
+  filter:blur(.2px)
 }
 @keyframes orbit{
   0%  { transform: translate(0,0) }
-  50% { transform: translate(-4vmin, 2vmin) }
+  50% { transform: translate(-3.5vmin, 1.6vmin) }
   100%{ transform: translate(0,0) }
 }
 
@@ -115,45 +120,50 @@ svg{position:absolute;inset:0;width:100%;height:100%}
 .ctrls{position:absolute;top:14px;right:14px;z-index:2}
 .ctrls button{
   background:#2b142c; border:1px solid #5a2b5a; color:#fff; padding:8px 12px;
-  border-radius:999px; font-weight:600; font-size:13px; opacity:.85
+  border-radius:999px; font-weight:600; font-size:13px; opacity:.9
 }
 .ctrls button:hover{opacity:1}
 
-/* ---------- MENÜ SAHNESİ ---------- */
-#sceneMenu{position:absolute;inset:0;overflow:auto;padding:6vmin 5vmin}
-.menuTitle{
-  text-align:center; font-size:clamp(28px,6.5vw,48px); font-weight:800;
-  margin:0 0 18px; color:#ffd1e6; text-shadow:0 0 18px #ff9dc755
+/* ======= PANEL MENÜ ======= */
+#sceneMenu{position:absolute;inset:0;overflow:auto;padding:5.5vmin}
+.menuHead{
+  text-align:center; margin:0 0 18px;
+  font-size:clamp(28px,6.2vw,46px); font-weight:800; color:#ffd1e6;
+  text-shadow:0 0 18px #ff9dc755
 }
-.grid{
-  display:grid; gap:16px;
-  grid-template-columns: repeat(2, minmax(0,1fr));
+.panels{
+  display:grid; gap:18px;
+  grid-template-columns:repeat(2,minmax(0,1fr));
   max-width:1100px; margin:0 auto;
 }
-.card{
-  background:linear-gradient(180deg,#2a122a 0,#1c0a1c 100%);
-  border:1px solid var(--card-b); border-radius:18px; padding:20px 18px;
-  box-shadow: 0 8px 30px #0006, inset 0 0 0 1px #ffffff10;
-  transition: transform .12s ease, box-shadow .12s ease;
-  font-size:clamp(18px,4.6vw,28px); font-weight:800;
+.panel{
+  border:1px solid var(--panelStroke);
+  border-radius:18px; overflow:hidden;
+  background:var(--panel);
+  box-shadow:0 14px 40px #0007, inset 0 0 0 1px #ffffff10;
+  transition:transform .12s ease, box-shadow .12s ease;
 }
-.card small{display:block; font-weight:500; opacity:.8; margin-top:6px; font-size:.55em}
-.card:active{transform:scale(.98)}
-.card--full{grid-column:1/-1}
-
-/* 2×2 + 1 düzen mobilde de büyük kalsın */
-@media (max-width:640px){
-  .grid{grid-template-columns:1fr}
-  .card--full{grid-column:auto}
+.panel:active{transform:scale(.985)}
+.panel__top{
+  background:linear-gradient(180deg,var(--panelTop),#1a081a);
+  padding:14px 18px; font-weight:800; display:flex; align-items:center; gap:12px;
+  font-size:clamp(18px,4.8vw,26px)
+}
+.panel__top .ico{font-size:1.2em}
+.panel__body{padding:16px 18px;color:#ffecf7bd;font-size:clamp(14px,3.8vw,18px)}
+.panel--full{grid-column:1/-1}
+@media (max-width:680px){
+  .panels{grid-template-columns:1fr}
+  .panel--full{grid-column:auto}
 }
 </style>
 </head>
 <body>
 
-<!-- ================== SAHNE 1: LOGO ================== -->
-<section id="sceneLogo">
+<!-- ====== SAHNE 1: LOGO ====== -->
+<section id="sceneLogo" aria-hidden="false">
   <canvas id="bubbles"></canvas>
-  <div class="center">
+  <div class="logoWrap">
     <div class="logo" aria-label="Canım Annem logosu">
       <svg viewBox="0 0 100 100" aria-hidden="true">
         <circle class="arc1" cx="50" cy="50" r="44"/>
@@ -172,10 +182,10 @@ svg{position:absolute;inset:0;width:100%;height:100%}
       <div class="star s2"></div>
     </div>
   </div>
-  <div id="flash" class="flash"></div>
+  <div id="flash" class="flash" aria-hidden="true"></div>
 </section>
 
-<!-- ================== SAHNE 2: SLAYT ================== -->
+<!-- ====== SAHNE 2: SLAYT ====== -->
 <section id="sceneSlide" class="hidden" aria-live="polite">
   <div class="bgSpace"></div>
   <div class="sun" aria-hidden="true"></div>
@@ -189,20 +199,39 @@ svg{position:absolute;inset:0;width:100%;height:100%}
   </div>
 </section>
 
-<!-- ================== SAHNE 3: MENÜ ================== -->
+<!-- ====== SAHNE 3: PANEL MENÜ ====== -->
 <section id="sceneMenu" class="hidden">
-  <h2 class="menuTitle">💖 Ana Menü 💖</h2>
-  <div class="grid">
-    <a class="card" href="#"><span>📸 Anılar</span><small>Zaman yolculuğu</small></a>
-    <a class="card" href="#"><span>🍰 Tarifler</span><small>Lezzet defteri</small></a>
-    <a class="card" href="#"><span>💬 Notlarım</span><small>Sana yazdıklarım</small></a>
-    <a class="card" href="#"><span>🌹 Bugün Mesaj</span><small>Bir tebessüm</small></a>
-    <a class="card card--full" href="#"><span>ℹ️ Hakkında</span><small>Küçük hediye</small></a>
+  <h2 class="menuHead">💖 Ana Menü 💖</h2>
+  <div class="panels">
+    <a class="panel" href="#">
+      <div class="panel__top"><span class="ico">📸</span> Anılar</div>
+      <div class="panel__body">Zaman yolculuğu — güzel kareler.</div>
+    </a>
+
+    <a class="panel" href="#">
+      <div class="panel__top"><span class="ico">🍰</span> Tarifler</div>
+      <div class="panel__body">Lezzet defteri — sevdiğin tatlar.</div>
+    </a>
+
+    <a class="panel" href="#">
+      <div class="panel__top"><span class="ico">💬</span> Notlarım</div>
+      <div class="panel__body">Sana yazdıklarım — kalpten cümleler.</div>
+    </a>
+
+    <a class="panel" href="#">
+      <div class="panel__top"><span class="ico">🌹</span> Bugün Mesaj</div>
+      <div class="panel__body">Bir tebessüm — küçük sürpriz.</div>
+    </a>
+
+    <a class="panel panel--full" href="#">
+      <div class="panel__top"><span class="ico">ℹ️</span> Hakkında</div>
+      <div class="panel__body">Bu küçük sitenin hikâyesi ve sana özel not.</div>
+    </a>
   </div>
 </section>
 
 <script>
-/* ===== Baloncuk animasyonu (logo) ===== */
+/* ===== Baloncuklar (logo arka planı) — şeffaf canvas ===== */
 (function(){
   const c = document.getElementById('bubbles');
   const ctx = c.getContext('2d');
@@ -221,7 +250,7 @@ svg{position:absolute;inset:0;width:100%;height:100%}
     }
   }
   function tick(){
-    ctx.clearRect(0,0,W,H);
+    ctx.clearRect(0,0,W,H);  // şeffaf temizleme
     for(const b of balls){
       b.a+=(Math.random()-.5)*0.03; b.x+=Math.cos(b.a)*b.s; b.y+=Math.sin(b.a)*b.s;
       if(b.x<-b.r) b.x=W+b.r; else if(b.x>W+b.r) b.x=-b.r;
@@ -243,7 +272,7 @@ const flash      = document.getElementById('flash');
 const slideText  = document.getElementById('slideText');
 
 const METIN = `ANNE;
-SENİN GÜLÜŞÜNLE BAŞLIYOR GÜNÜM,
+SENİN GÜLÜŞÜNLE BAŞLADI İLK YAŞLARM,
 SENİN SESİNLE SAKİNLEŞİYOR KALBİM.
 DÜNYA KARIŞSA DA, SENİN VARLIĞIN HER ŞEYİ DÜZENE SOKUYOR.
 KÜÇÜK BİR BAKIŞIN, EN ZOR ANIMDA UMUT OLUYOR.
@@ -254,15 +283,16 @@ HER ADIMIMDA SENİN EMEĞİN, HER NEFESİMDE SENİN DUANI TAŞIYORUM.
 BEN NE KADAR BÜYÜSEM DE, SENİN YANINDA HÂLÂ O KÜÇÜK ÇOCUĞUM.
 
 KALBİMİN EN DERİNİNDE SENİN KOKUN VAR,
-O KOKU, DÜNYADAKİ HER ŞEYE BEDEN.
+O KOKU, DÜNYADAKİ HER ŞEYE BEDEL.
 İYİ Kİ VARSIN ANNE…
-İYİ Kİ SENİN EVLADINIM`;
+İYİ Kİ SENİN EVLADINIM🥹
+🌹💐`;
 
+/* Logo -> flaş -> Slayt */
 function showSlide(){
-  sceneLogo.classList.add('hidden');
-  sceneSlide.classList.remove('hidden');
+  sceneLogo.classList.add('hidden');      // logo tamamen kaldır
+  sceneSlide.classList.remove('hidden');  // sonra slaytı aç
   slideText.textContent = METIN;
-  // slayt süresi: metin uzunluğuna göre yaklaşık
   const dur = Math.max(36, Math.min(65, Math.round(METIN.length/10)));
   document.documentElement.style.setProperty('--scrollDur', dur+'s');
   // Otomatik menüye geçiş
@@ -273,14 +303,17 @@ function showMenu(){
   sceneMenu.classList.remove('hidden');
 }
 
-// Logo -> flaş -> slayt
-setTimeout(()=>{
+/* Kara kutuyu engelle: flaş bitince DOM'dan kaldırılıyor */
+function runFlashThen(cb){
   flash.classList.add('run');
-  setTimeout(showSlide, 900);
-}, 3500);
+  setTimeout(()=>{ flash.classList.remove('run'); flash.remove(); cb&&cb(); }, 900);
+}
 
-// "Yazıyı Geç" butonu
+/* 3.5 sn logo sonra flaş & slayt */
+setTimeout(()=> runFlashThen(showSlide), 3500);
+
+/* Yazıyı geç */
 document.getElementById('btnSkip').addEventListener('click', showMenu);
 </script>
 </body>
-</html>
+  </html>
