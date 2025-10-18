@@ -3,162 +3,225 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Canım Annem — Slayt</title>
+<title>Canım Annem – Slayt</title>
 <style>
-  /* ======= TEMA ======= */
+  /* ---------- RENKLER ---------- */
   :root{
-    --bg:#2A001F;                 /* çok koyu bordo/mor */
-    --text:#CFA3FF;               /* lavanta */
-    --shadow:#7E3EFF;             /* mor-pembe yoğun gölge */
-    --sun-core:#FFD6FF;           /* güneşin göbeği */
-    --sun-halo:#9A4AFF;           /* güneş halesi */
-    --dust:#E3A7FF33;             /* toz noktaları (şeffaf) */
+    --bg: #150514;          /* çok koyu bordo/siyah */
+    --text: #CFA3FF;        /* lavanta/eflatun yazı */
+    --dustA:#FF75A0;        /* toz pastel 1 */
+    --dustB:#F3A1B8;        /* toz pastel 2 */
+    --dustC:#E07DFF;        /* toz pastel 3 */
   }
 
-  html,body{height:100%;margin:0;background:var(--bg);overflow:hidden;font-family: "Georgia", "Times New Roman", serif;}
-  .stage{position:relative;height:100%;width:100%;isolation:isolate;}
-
-  /* arka plan tozları */
-  .dust{
-    position:absolute; inset:0; pointer-events:none; z-index:0;
-    background:
-      radial-gradient(2px 2px at 10% 20%, var(--dust) 40%, transparent 41%),
-      radial-gradient(2px 2px at 30% 10%, var(--dust) 40%, transparent 41%),
-      radial-gradient(2px 2px at 55% 35%, var(--dust) 40%, transparent 41%),
-      radial-gradient(2px 2px at 70% 25%, var(--dust) 40%, transparent 41%),
-      radial-gradient(2px 2px at 15% 70%, var(--dust) 40%, transparent 41%),
-      radial-gradient(2px 2px at 85% 60%, var(--dust) 40%, transparent 41%),
-      radial-gradient(2px 2px at 50% 85%, var(--dust) 40%, transparent 41%),
-      radial-gradient(2px 2px at 90% 80%, var(--dust) 40%, transparent 41%),
-      radial-gradient(2px 2px at 40% 55%, var(--dust) 40%, transparent 41%);
-    animation: drift 18s linear infinite;
-    opacity:.7;
+  /* ---------- SAYFA ---------- */
+  html,body{
+    height:100%;
+    margin:0;
+    background:var(--bg);
+    overflow:hidden; /* slayt sinematik */
+    font-family: Georgia,"Times New Roman",serif;
   }
-  @keyframes drift{
-    0%   {transform: translateY(0) translateX(0);}
-    50%  {transform: translateY(-10px) translateX(8px);}
-    100% {transform: translateY(0) translateX(0);}
+  .stage{
+    position:relative;
+    width:100%;
+    height:100%;
   }
 
-  /* hareket eden güneş */
+  /* ---------- TOZLAR (Canvas) ---------- */
+  canvas#dust{
+    position:absolute; inset:0;
+    z-index:0;
+    filter: blur(0.2px);
+  }
+
+  /* ---------- HAREKETLİ GÜNEŞ ---------- */
+  .sun-orbit{
+    position:absolute; inset:0;
+    pointer-events:none;
+    z-index:1;
+  }
   .sun{
-    position:absolute; width:38vmin; height:38vmin; border-radius:50%;
-    filter: blur(24px);
+    --size: 220px;
+    position:absolute; top:50%; left:50%;
+    width:var(--size); height:var(--size);
+    border-radius:50%;
     background:
-      radial-gradient(circle, var(--sun-core) 0 35%, var(--sun-halo) 60%, transparent 70%);
-    animation: sunPath 26s ease-in-out infinite;
-    z-index:1; opacity:.75;
+      radial-gradient( circle at 50% 50%,
+        #FFE8AA 0%,
+        #FFC96B 25%,
+        #C08B3D 48%,
+        transparent 60%);
+    filter: blur(2px) saturate(115%);
+    opacity:.55;
+    transform-origin: -40vmin -22vmin;  /* yörüngenin merkezi */
+    animation: orbit 68s linear infinite;
   }
-  /* sağ üst taraflarda yavaş yörünge */
-  @keyframes sunPath{
-    0%   {top:8%;  right:8%;}
-    25%  {top:16%; right:14%;}
-    50%  {top:22%; right:8%;}
-    75%  {top:14%; right:3%;}
-    100% {top:8%;  right:8%;}
+  @keyframes orbit{
+    from{ transform: rotate(0deg) translate(0); }
+    to  { transform: rotate(360deg) translate(0); }
   }
 
-  /* yazı alanı */
-  .scroll-wrap{
-    position:absolute; inset:0; display:flex; align-items:flex-end; justify-content:center;
-    padding:4vh 4vw 3vh; z-index:2;
-    /* alttan geliyormuş hissi için alt tarafa hafif vignette */
-    box-shadow: inset 0 -40vh 30vh -30vh #0008;
+  /* ---------- YAZI BLOĞU (ALTTAN YUKARI) ---------- */
+  .credits-wrap{
+    position:absolute; left:0; right:0; bottom:-100vh;
+    z-index:2; display:flex; justify-content:center;
+    transition: transform 60s linear;
+    /* başlarken ekranın altından gelsin */
+    transform: translateY(100vh);
   }
-  .scroll{
-    width: min(920px, 92vw);
-    max-height: 92vh;
-    overflow: hidden;
-    mask: linear-gradient(to top, transparent 0 4%, #000 10% 90%, transparent 100%);
+  .credits-wrap.start{
+    transform: translateY(-115%);
   }
-  .lines{
-    margin:0; padding:0; list-style:none;
-    /* alttan yukarı tek parça scroll */
-    animation: roll 42s linear forwards;
-  }
-  @keyframes roll{
-    from {transform: translateY(100%);}
-    to   {transform: translateY(-100%);}
-  }
-  .line{
+  .credits{
+    width:min(1000px, 90vw);
+    padding: 0 4vw 10vh;
     text-align:center;
-    color: var(--text);
+    text-transform:uppercase;
+    color:var(--text);
+    line-height:1.28;
+    letter-spacing:1px;
     text-shadow:
-      0 0 1px #fff7,
-      0 0 12px var(--shadow),
-      0 2px 0 #0007;
-    letter-spacing: .8px;
-    margin: 3.4vh 0;           /* satırlar arası ferah */
-    font-weight: 800;
-    /* dev yazı */
-    font-size: clamp(20px, 3.2vw, 38px);
+      0 0 1px #ffffffa0,
+      0 0 12px #B65CFF,
+      0 2px 0 #00000080;
+    font-weight:800;
+    /* mobilde de büyük görünsün */
+    font-size:clamp(26px, 4.4vw, 46px);
   }
-  .btn-skip{
-    position:absolute; top:12px; left:12px; z-index:3;
-    background:#00000066; color:#fff; border:1px solid #ffffff33;
-    padding:.55rem .8rem; border-radius:999px; font-size:.9rem;
-    backdrop-filter: blur(6px);
+  .gap{ height:2.2em; }
+
+  /* ---------- ÜST TUŞLAR ---------- */
+  .ui{
+    position:absolute; inset:16px 12px auto 12px;
+    display:flex; justify-content:space-between; z-index:3;
+    pointer-events:none;
   }
-  .btn-skip:active{transform: scale(.98);}
-  .to-menu{
-    position:absolute; top:12px; right:12px; z-index:3;
-    background:#00000066; color:#fff; border:1px solid #ffffff33;
-    padding:.55rem .8rem; border-radius:999px; font-size:.9rem;
+  .btn{
+    pointer-events:auto;
+    background:#ffffff14; color:#ddd;
+    border:1px solid #ffffff2a; border-radius:999px;
+    padding:.44rem .82rem; font:600 14px/1.1 system-ui, -apple-system, Segoe UI, Roboto, Arial;
     backdrop-filter: blur(6px);
     text-decoration:none;
   }
+  .btn:hover{ background:#ffffff22; color:#fff; }
 
-  /* küçük ekranlarda yazı daha da büyüsün (annen görsün) */
-  @media (max-width:480px){
-    .line{font-size: clamp(22px, 6.2vw, 34px);}
+  /* küçük ekranlarda tuşlar üstte taşmasın */
+  @media (max-width:420px){
+    .btn{ font-size:13px; padding:.4rem .7rem; }
   }
 </style>
 </head>
 <body>
   <div class="stage">
-    <div class="dust"></div>
-    <div class="sun" aria-hidden="true"></div>
+    <!-- Toz parçacıkları -->
+    <canvas id="dust"></canvas>
 
-    <button class="btn-skip" onclick="goMenu()">Yazıyı Geç</button>
-    <a class="to-menu" href="menu.html">Ana Menü</a>
+    <!-- Güneş (yavaş yörüngede) -->
+    <div class="sun-orbit">
+      <div class="sun" aria-hidden="true"></div>
+    </div>
 
-    <div class="scroll-wrap">
-      <div class="scroll">
-        <ul class="lines" id="lines">
-          <!-- METİN (tamamı büyük harf) -->
-          <li class="line">ANNE;</li>
-          <li class="line">SENİN GÜLÜŞÜNLE BAŞLIYOR GÜNÜM,</li>
-          <li class="line">SENİN SESİNLE SAKİNLEŞİYOR KALBİM.</li>
-          <li class="line">DÜNYA KARIŞSA DA, SENİN VARLIĞIN</li>
-          <li class="line">HER ŞEYİ DÜZENE SOKUYOR.</li>
-          <li class="line">KÜÇÜK BİR BAKIŞIN, EN ZOR ANIMDA</li>
-          <li class="line">UMUT OLUYOR.</li>
-          <li class="line">ELİNİN SICAKLIĞI, BİR EVİ DEĞİL,</li>
-          <li class="line">BİR HAYATI ISITIYOR.</li>
+    <!-- Üstte kontrol tuşları -->
+    <div class="ui">
+      <a class="btn" href="#" id="skip">Yazıyı Geç</a>
+      <a class="btn" href="menu.html">Ana Menü →</a>
+    </div>
 
-          <li class="line">SEN YORGUN DÜŞSEN DE,</li>
-          <li class="line">GÜCÜNÜ SEVGİDEN ALIYORSUN.</li>
-          <li class="line">HER ADIMIMDA SENİN EMEĞİN,</li>
-          <li class="line">HER NEFESİMDE SENİN DUANI TAŞIYORUM.</li>
-          <li class="line">BEN NE KADAR BÜYÜSEM DE,</li>
-          <li class="line">SENİN YANINDA HÂLÂ O</li>
-          <li class="line">KÜÇÜK ÇOCUĞUM.</li>
+    <!-- Slayt yazısı -->
+    <div class="credits-wrap" id="creditsWrap" aria-live="polite">
+      <div class="credits" id="credits">
+        <div class="gap"></div>
+        <div>ANNE;</div>
+        <div class="gap"></div>
+        <div>SENİN GÜLÜŞÜNLE BAŞLIYOR GÜNÜM,</div>
+        <div>SENİN SESİNLE SAKİNLEŞİYOR KALBİM.</div>
+        <div>DÜNYA KARIŞSA DA, SENİN VARLIĞIN HER ŞEYİ DÜZENE SOKUYOR.</div>
+        <div>KÜÇÜK BİR BAKIŞIN, EN ZOR ANIMDA UMUT OLUYOR.</div>
+        <div>ELİNİN SICAKLIĞI, BİR EVİ DEĞİL, BİR HAYATI ISITIYOR.</div>
 
-          <li class="line">KALBİMİN EN DERİNİNDE</li>
-          <li class="line">SENİN KOKUN VAR,</li>
-          <li class="line">O KOKU, DÜNYADAKİ HER ŞEYE BEDEN.</li>
-          <li class="line">İYİ Kİ VARSIN ANNE…</li>
-          <li class="line">İYİ Kİ SENİN EVLADINIM.</li>
-        </ul>
+        <div class="gap"></div>
+        <div>SEN YORGUN DÜŞSEN DE, GÜCÜNÜ SEVGİDEN ALIYORSUN.</div>
+        <div>HER ADIMIMDA SENİN EMEĞİN, HER NEFESİMDE SENİN DUANI TAŞIYORUM.</div>
+        <div>BEN NE KADAR BÜYÜSEM DE, SENİN YANINDA HÂLÂ O KÜÇÜK ÇOCUĞUM.</div>
+
+        <div class="gap"></div>
+        <div>KALBİMİN EN DERİNİNDE SENİN KOKUN VAR,</div>
+        <div>O KOKU, DÜNYADAKİ HER ŞEYE BEDEN.</div>
+        <div>İYİ Kİ VARSIN ANNE…</div>
+        <div>İYİ Kİ SENİN EVLADINIM</div>
+        <div class="gap"></div><div class="gap"></div>
       </div>
     </div>
   </div>
 
 <script>
-  // Slayt bitince otomatik menüye geç
-  const lines = document.getElementById('lines');
-  lines.addEventListener('animationend', () => goMenu());
-  function goMenu(){ window.location.href = 'menu.html'; }
+/* ---------------- Toz parçacıkları (canvas) ---------------- */
+(function(){
+  const c = document.getElementById('dust');
+  const ctx = c.getContext('2d');
+  let W,H, DPR = Math.max(1, Math.min(2, window.devicePixelRatio||1));
+  let particles = [];
+
+  function resize(){
+    W = c.width  = Math.floor(innerWidth * DPR);
+    H = c.height = Math.floor(innerHeight* DPR);
+    c.style.width  = innerWidth+'px';
+    c.style.height = innerHeight+'px';
+    particles.length = Math.min(140, Math.floor(innerWidth/6)); // yoğunluk
+    for(let i=0;i<particles.length;i++){
+      particles[i] = {
+        x: Math.random()*W,
+        y: Math.random()*H,
+        r: Math.random()*2*DPR + 0.6*DPR,
+        a: Math.random()*Math.PI*2,
+        s: 0.08 + Math.random()*0.35,   // hız
+        hue: [getCssVar('--dustA'), getCssVar('--dustB'), getCssVar('--dustC')][Math.floor(Math.random()*3)]
+      };
+    }
+  }
+  function getCssVar(name){
+    return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  }
+
+  function tick(){
+    ctx.clearRect(0,0,W,H);
+    for(const p of particles){
+      // her yöne yavaş sürüklenme
+      p.a += (Math.random()-0.5)*0.05;
+      p.x += Math.cos(p.a)*p.s;
+      p.y += Math.sin(p.a)*p.s;
+
+      // ekran dışına çıkarsa geri sar
+      if(p.x<0) p.x=W; else if(p.x>W) p.x=0;
+      if(p.y<0) p.y=H; else if(p.y>H) p.y=0;
+
+      ctx.beginPath();
+      ctx.fillStyle = p.hue;
+      ctx.globalAlpha = 0.7;
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+    requestAnimationFrame(tick);
+  }
+  addEventListener('resize', resize);
+  resize(); tick();
+})();
+
+/* ------------- Slaytı başlat / geç butonu ------------- */
+const wrap = document.getElementById('creditsWrap');
+const skip = document.getElementById('skip');
+
+// 2 sn sonra yazı aşağıdan yukarı yürüsün
+setTimeout(()=> wrap.classList.add('start'), 2000);
+
+// Geç -> menü
+skip.addEventListener('click', (e)=>{
+  e.preventDefault();
+  location.href = 'menu.html';
+});
 </script>
 </body>
-                                           </html>
+</html>
