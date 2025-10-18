@@ -9,62 +9,46 @@
   --bordo:#4a0d2a;
   --bordo-dark:#3a0b1f;
   --krem:#f8eadb;
-  --gri:#f2f2f2;
+  --gri:#ececec;
   --pembe:#ff9ec6;
   --card-grad:linear-gradient(180deg,#2b1b26,#1c121d 60%);
   --card-border:#ff9ec6;
 }
-html,body{margin:0;height:100%;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;overflow:hidden;background:var(--bordo)}
-/* yıldızlar – tüm ekranlar için sabit arka plan */
-#starsBG{position:fixed;inset:0;z-index:-2;pointer-events:none}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;overflow:hidden;background:#2a0a18;transition:background 900ms ease}
+body.bordo{background:var(--bordo)}
 
-/* her ekran */
+/* ortak ekran iskeleti */
 .screen{position:fixed;inset:0;display:none;align-items:center;justify-content:center}
 .show{display:flex}
 
-/* -------- SPLASH (logo) -------- */
+/* ---------- SPLASH (logo + baloncuklar) ---------- */
 #splash{background:transparent}
+#bubbles{position:absolute;inset:0;z-index:-1} /* baloncuklar sadece splash'ta */
 .logoWrap{position:relative;width:min(96vw,640px);aspect-ratio:1/1;display:grid;place-items:center;filter:drop-shadow(0 16px 46px rgba(0,0,0,.35))}
-.logoText{position:absolute;color:#fff;text-shadow:0 14px 30px rgba(0,0,0,.65),0 0 3px #fff;font-weight:1000;letter-spacing:.8px}
-.logoTop{font-size:clamp(46px,10vw,92px);transform:translateY(-42%)}
-.logoBottom{font-size:clamp(54px,11vw,104px);transform:translateY(42%)}
-.space{display:block;height:clamp(12px,3.2vw,22px)}
-/* nabız parıltı */
-.bloom{position:absolute;width:54%;aspect-ratio:1/1;border-radius:50%;
-  background:radial-gradient(circle at 50% 50%, rgba(255,230,245,.95) 0%, rgba(255,158,198,.55) 40%, rgba(255,158,198,0) 70%);
-  filter:blur(6px);opacity:.85;animation:breathe 2.2s ease-in-out infinite}
-@keyframes breathe{0%,100%{transform:scale(.94)}50%{transform:scale(1.08)}}
-/* SVG halka kutusu */
-.ringBox{position:absolute;inset:0;display:grid;place-items:center}
-.svgRing{width:100%;height:100%}
-/* yalnızca “yay” görünmesi için stroke-dasharray kısa; grup dönüyor */
-.sweep   {animation:spin 4.2s linear infinite}
-.counter {animation:spinR 5.4s linear infinite}
+
+/* Dönen logo: iki zıt yay kesiti + iç metin */
+.logo{position:relative;width:100%;aspect-ratio:1/1;display:grid;place-items:center}
+.logo svg{width:100%;height:100%}
+.spin{animation:spin 4.2s linear infinite;transform-origin:50% 50%}
+.spinR{animation:spinR 5.2s linear infinite;transform-origin:50% 50%}
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes spinR{to{transform:rotate(-360deg)}}
-/* elektron – çember çevresinde dönen nokta */
-.electron{position:absolute;top:50%;left:50%;width:18px;height:18px;border-radius:50%;background:#fff;
-  box-shadow:0 0 18px #fff,0 0 36px #ffd6ea,0 0 80px #ff8fb3;transform:translate(-50%,-50%);
-  animation:orbit 4.6s linear infinite}
-@keyframes orbit{
-  from{transform:translate(-50%,-50%) rotate(0) translate(210px)}
-  to  {transform:translate(-50%,-50%) rotate(360deg) translate(210px)}
-}
-/* logo fade-out */
-.fade{position:absolute;inset:0;background:#000;opacity:0;pointer-events:none}
-.fade.show{animation:fadeOut .7s ease forwards}
-@keyframes fadeOut{from{opacity:0}to{opacity:1}}
 
-/* -------- KAYAN YAZI -------- */
+/* merkez yazı */
+.logoTextTop{position:absolute;color:#fff;font-weight:1000;text-shadow:0 10px 28px rgba(0,0,0,.5),0 0 3px #fff;font-size:clamp(46px,10vw,92px);transform:translateY(-42%)}
+.logoTextBottom{position:absolute;color:#fff;font-weight:1000;text-shadow:0 10px 28px rgba(0,0,0,.5),0 0 3px #fff;font-size:clamp(54px,11vw,106px);transform:translateY(42%)}
+
+/* ---------- KAYAN YAZI ---------- */
 #scroll{background:var(--bordo-dark);overflow:hidden}
 .credits{position:absolute;left:50%;bottom:-10vh;transform:translateX(-50%);width:92vw;max-width:1100px;text-align:center}
 .credits p{
-  margin:0 0 6.4vh 0;
-  font-size:clamp(38px,9vw,64px);font-weight:900;line-height:1.22;letter-spacing:.6px;color:var(--krem);
+  margin:0 0 6.4vh;
+  font-size:clamp(40px,9.4vw,66px);font-weight:900;line-height:1.22;letter-spacing:.6px;color:var(--krem);
   text-shadow:0 .08em 0 var(--gri), .02em .12em .08em rgba(0,0,0,.45);
 }
 
-/* -------- MENÜ 2×2 + 1 -------- */
+/* ---------- MENÜ 2×2 + 1 ---------- */
 #menu{flex-direction:column;gap:18px;text-align:center;padding:14px}
 #menu h2{margin:0 0 8px;font-size:clamp(38px,8.6vw,68px);color:#ffd6ea;text-shadow:0 3px 14px rgba(0,0,0,.5)}
 .tiles{display:grid;gap:18px;width:94%;max-width:1200px;margin:0 auto;grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -84,53 +68,42 @@ html,body{margin:0;height:100%;font-family:system-ui,-apple-system,"Segoe UI",Ro
 .card{background:var(--card-grad);border:2px solid var(--card-border);border-radius:16px;box-shadow:0 10px 24px rgba(255,105,165,.12);padding:14px}
 
 @media (prefers-reduced-motion:reduce){
-  .sweep,.counter,.electron,.bloom{animation:none}
+  .spin,.spinR{animation:none}
 }
 </style>
 </head>
 <body>
 
-<!-- yıldız arka plan -->
-<canvas id="starsBG"></canvas>
-
 <!-- 1) SPLASH -->
 <section id="splash" class="screen show" aria-label="Giriş logosu">
+  <canvas id="bubbles"></canvas>
   <div class="logoWrap">
-    <!-- SVG: iki zıt dönen yay -->
-    <div class="ringBox">
-      <svg class="svgRing" viewBox="0 0 500 500">
+    <div class="logo">
+      <svg viewBox="0 0 500 500" aria-hidden="true">
         <defs>
-          <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="0%">
             <stop offset="0%" stop-color="#fff"/>
             <stop offset="50%" stop-color="#ffd6ea"/>
             <stop offset="100%" stop-color="#ff8fb3"/>
           </linearGradient>
         </defs>
-        <!-- dış aura -->
-        <circle cx="250" cy="250" r="225" fill="rgba(255,255,255,.06)"></circle>
-
-        <!-- yay 1 (sweep) -->
-        <g class="sweep" style="transform-origin:250px 250px">
-          <circle cx="250" cy="250" r="210" fill="none" stroke="url(#grad)" stroke-width="8"
-                  stroke-linecap="round" stroke-dasharray="140 1400"></circle>
+        <!-- yay 1 -->
+        <g class="spin">
+          <circle cx="250" cy="250" r="210" fill="none" stroke="url(#g)" stroke-width="10"
+                  stroke-linecap="round" stroke-dasharray="140 1400"/>
         </g>
-        <!-- yay 2 (counter) -->
-        <g class="counter" style="transform-origin:250px 250px">
-          <circle cx="250" cy="250" r="175" fill="none" stroke="rgba(255,214,234,.9)" stroke-width="5"
-                  stroke-linecap="round" stroke-dasharray="110 1100"></circle>
+        <!-- yay 2 (zıt) -->
+        <g class="spinR">
+          <circle cx="250" cy="250" r="175" fill="none" stroke="rgba(255,214,234,.95)" stroke-width="7"
+                  stroke-linecap="round" stroke-dasharray="110 1100"/>
         </g>
-        <!-- iç koyu disk -->
-        <circle cx="250" cy="250" r="150" fill="rgba(0,0,0,.18)" stroke="rgba(255,255,255,.5)" stroke-width="2"></circle>
+        <!-- iç yumuşak disk -->
+        <circle cx="250" cy="250" r="150" fill="rgba(0,0,0,.18)" stroke="rgba(255,255,255,.5)" stroke-width="2"/>
       </svg>
+
+      <div class="logoTextTop">Canım</div>
+      <div class="logoTextBottom">Annem 💐</div>
     </div>
-
-    <div class="bloom"></div>
-    <div class="electron"></div>
-
-    <div class="logoText logoTop">Canım<span class="space"></span></div>
-    <div class="logoText logoBottom">Annem 💐</div>
-
-    <div id="fade" class="fade"></div>
   </div>
 </section>
 
@@ -159,43 +132,48 @@ html,body{margin:0;height:100%;font-family:system-ui,-apple-system,"Segoe UI",Ro
 <section id="pg-hakkinda" class="page"><header><button class="back" data-back>← Geri</button><h2>ℹ️ Hakkında</h2></header><div class="content"><div class="card">Bu site “Canım Annem”e sevgiyle hazırlandı.</div></div></section>
 
 <script>
-/* kısayollar */
+/* kısa yardımcılar */
 const $ = s => document.querySelector(s);
 const show = id => document.querySelectorAll('.screen').forEach(sc=>sc.classList.toggle('show', sc.id===id));
 const openPage = id => $('#'+id).classList.add('show');
 const closePages = () => document.querySelectorAll('.page.show').forEach(p=>p.classList.remove('show'));
 
-/* ---- YILDIZ ARKA PLAN ---- */
-(function starsBG(){
-  const c = document.getElementById('starsBG'); const ctx = c.getContext('2d');
+/* ---------- BALONCUKLAR (sadece splash) ---------- */
+(function bubbles(){
+  const c = document.getElementById('bubbles'); const ctx = c.getContext('2d');
   const resize=()=>{c.width=innerWidth; c.height=innerHeight}; addEventListener('resize',resize); resize();
-  const N = 180; const stars = Array.from({length:N}, ()=>({
-     x:Math.random()*c.width, y:Math.random()*c.height, r:Math.random()*1.6+0.4, s:Math.random()*0.8+0.25
-  }));
+  const N = 80; const B = Array.from({length:N},()=>spawn());
+  function spawn(){
+    const r = Math.random()*12+4;
+    return {x:Math.random()*c.width, y:c.height+Math.random()*c.height*.4, r, spd:Math.random()*0.6+0.2, drift:(Math.random()*0.6-0.3)};
+  }
   (function tick(){
     ctx.clearRect(0,0,c.width,c.height);
-    for(const st of stars){
-      ctx.beginPath(); ctx.arc(st.x,st.y,st.r*(0.6+Math.sin(Date.now()*0.002*st.s)*0.4),0,Math.PI*2);
-      ctx.fillStyle='rgba(255,230,245,.75)'; ctx.fill();
+    for(const b of B){
+      ctx.beginPath(); ctx.arc(b.x,b.y,b.r,0,Math.PI*2);
+      ctx.fillStyle='rgba(255,255,255,.10)'; ctx.fill();
+      ctx.strokeStyle='rgba(255,214,234,.35)'; ctx.lineWidth=1; ctx.stroke();
+      b.y -= b.spd; b.x += b.drift;
+      if(b.y < -20) Object.assign(b, spawn(), {y:c.height+20});
     }
     requestAnimationFrame(tick);
   })();
 })();
 
-/* ---- ZAMANLAMA ---- */
-const SPLASH_MS = 4200;            // logo süre
-const GAP_AFTER_FADE_MS = 3000;    // logo kaybolduktan sonra bekleme (istediğin 3 sn)
+/* ---------- ZAMANLAMA (fade yok; direkt bordo + bekleme) ---------- */
+const LOGO_MS = 3600;    // logo ekranda kalma süresi (3–4 sn)
+const WAIT_AFTER_BORDO = 2000; // bordo olduktan sonra bekleme (2 sn)
 
 setTimeout(()=>{
-  const f = $('#fade');      // logo üzerine siyah fade
-  f.classList.add('show');
-  f.addEventListener('animationend', ()=>{
-    // fade bitti – 3 sn bekle:
-    setTimeout(()=>{ show('scroll'); startCredits(); }, GAP_AFTER_FADE_MS);
-  }, {once:true});
-}, SPLASH_MS);
+  // 1) splash kalksın
+  $('#splash').style.display='none';
+  // 2) arka plan bordo olsun (body class)
+  document.body.classList.add('bordo');
+  // 3) 2 sn sonra yazı başlasın
+  setTimeout(()=>{ show('scroll'); startCredits(); }, WAIT_AFTER_BORDO);
+}, LOGO_MS);
 
-/* ---- KAYAN YAZI ---- */
+/* ---------- KAYAN YAZI ---------- */
 const PARAGRAPH = `Anne; senin yanında zaman yavaşlıyor, kalbim huzur buluyor.
 Gözlerin güldüğünde evim aydınlanıyor, sesinle her şey yoluna giriyor.
 Küçük dokunuşların büyük bir dünyaya bedel; yorgunluklarım eriyor, umutlarım çoğalıyor.
@@ -209,7 +187,7 @@ function startCredits(){
   let line=[]; const push=()=>{const p=document.createElement('p');p.textContent=line.join(' ');box.appendChild(p);line=[];}
   words.forEach(w=>{ line.push(w); if(line.join(' ').length>18){push();}}); if(line.length) push();
 
-  // alttan başlat → yukarı
+  // alttan başlat → yukarı akıt
   const h = box.scrollHeight, view = innerHeight;
   const distance = h + view*1.1;
   const seconds = Math.max(18, Math.min(60, distance/40));
@@ -238,4 +216,4 @@ function fillTodayMessage(){
 }
 </script>
 </body>
-  </html>
+</html>
