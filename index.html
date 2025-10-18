@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Canım Annem 🌷🌹</title>
 <style>
-/* ===== Temalar (sadece gradyent geçiş) ===== */
 :root{
   --intro-bg: radial-gradient(circle at 30% 20%, #ffe6f2, #ffd3e7, #ffb3d2);
   --scroll-bg: radial-gradient(120% 90% at 50% 10%, #6a0034 0%, #200013 100%);
@@ -14,36 +13,53 @@
   --card-border:#ff9ec6;
   --text:#ffeef6;
 }
-html,body{margin:0;height:100%;overflow:hidden;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--text);}
-body{background:var(--intro-bg);transition:background .9s ease}
+html,body{
+  margin:0;height:100%;overflow:hidden;
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--text);
+}
+body{
+  background:var(--intro-bg);
+  transition: background 3s ease; /* <-- yavaş, belirgin geçiş */
+}
 
-/* Ekran katmanları */
+/* ekranlar */
 .screen{position:fixed; inset:0; display:none; align-items:center; justify-content:center}
 .show{display:flex}
-.hide{display:none}
 
-/* 0) Giriş */
-#welcome h1{margin:0;font-size:clamp(36px,8vw,60px);color:#a60044;text-shadow:0 2px 8px rgba(0,0,0,.18);animation:fadeOut 3s 2s forwards}
+/* giriş */
+#welcome h1{
+  margin:0;font-size:clamp(36px,8vw,60px);color:#a60044;text-shadow:0 2px 8px rgba(0,0,0,.18);
+  animation:fadeOut 3s 2s forwards
+}
 @keyframes fadeOut{to{opacity:0;visibility:hidden}}
 
-/* 1) Mektup */
-#letterScreen{background:transparent}
-.envelope{width:min(82vw,340px);height:min(58vw,220px);background:#fff;border:3px solid #a60044;border-radius:14px;box-shadow:0 10px 40px rgba(0,0,0,.22);cursor:pointer}
-
-/* 2) Sinematik yazı (tek parça scroll) */
-#scrollScreen{position:relative}
-#scrollScreen::before{content:"";position:absolute;inset:0;background:radial-gradient(120% 80% at 50% -10%, transparent 60%, rgba(0,0,0,.35) 100%),linear-gradient(90deg, rgba(0,0,0,.6), transparent 18%, transparent 82%, rgba(0,0,0,.6));pointer-events:none}
-.scrollText{
-  position:absolute; left:50%; transform:translateX(-50%); bottom:-100%;
-  width:min(92vw, 900px); text-align:center; line-height:1.28;
-  font-weight:900; letter-spacing:.4px; color:#fff;
-  text-shadow: 0 5px 14px rgba(0,0,0,.75);
-  font-size: clamp(36px, 8.5vw, 88px);  /* DAHA BÜYÜK */
-  animation: scrollUp 24s linear forwards;
+/* mektup */
+.envelope{
+  width:min(82vw,340px);height:min(58vw,220px);
+  background:#fff;border:3px solid #a60044;border-radius:14px;
+  box-shadow:0 10px 40px rgba(0,0,0,.22);cursor:pointer
 }
-@keyframes scrollUp{ from{ bottom:-100% } to{ bottom:120% } }
 
-/* 3) Ana menü (2-2-1 düzen, dev butonlar) */
+/* sinematik yazı */
+#scrollScreen{position:relative}
+#scrollScreen::before{
+  content:"";position:absolute;inset:0;z-index:0; /* arkaya al */
+  background:
+    radial-gradient(120% 80% at 50% -10%, transparent 60%, rgba(0,0,0,.35) 100%),
+    linear-gradient(90deg, rgba(0,0,0,.6), transparent 18%, transparent 82%, rgba(0,0,0,.6));
+  pointer-events:none;
+}
+.scrollText{
+  position:absolute; left:50%; transform:translateX(-50%); bottom:-120%;
+  width:min(92vw, 900px); text-align:center; line-height:1.28;
+  font-weight:900; letter-spacing:.4px; color:#fff; z-index:2; /* öne al */
+  text-shadow:0 5px 14px rgba(0,0,0,.75);
+  font-size: clamp(36px, 8.5vw, 88px);
+  /* animasyonu js başlatacak */
+}
+@keyframes scrollUp{ from{ bottom:-120% } to{ bottom:130% } }
+
+/* ana menü 2-2-1 düzen */
 #menu{flex-direction:column;gap:18px;text-align:center;padding:14px}
 #menu h2{margin:0 0 8px;font-size:clamp(34px,8vw,64px);color:#ffd6ea;text-shadow:0 3px 14px rgba(0,0,0,.5)}
 .tiles{
@@ -58,10 +74,10 @@ body{background:var(--intro-bg);transition:background .9s ease}
 }
 .tile:active{transform:scale(.98)}
 .big{font-size:clamp(28px,7.2vw,44px);font-weight:900;letter-spacing:.5px}
-.small{font-size:clamp(16px,4.4vw,22px);opacity:.95;margin-top:8px}
-.tile.wide{grid-column:1 / -1; max-width:720px; justify-self:center;}
+.small{font-size:clamp(16px,4.6vw,22px);opacity:.95;margin-top:8px}
+.tile.wide{grid-column:1 / -1; max-width:720px; justify-self:center}
 
-/* Basit sayfa iskeleti */
+/* sayfa iskeleti */
 .page{position:fixed; inset:0; display:none; background:var(--menu-bg); z-index:21}
 .page.show{display:block}
 .page header{display:flex;align-items:center;gap:10px;padding:14px}
@@ -88,7 +104,7 @@ body{background:var(--intro-bg);transition:background .9s ease}
   <div id="scrollText" class="scrollText"></div>
 </section>
 
-<!-- 3) Ana menü (2-2-1) -->
+<!-- 3) Ana menü -->
 <section id="menu" class="screen">
   <h2>💖 Ana Menü 💖</h2>
   <div class="tiles">
@@ -123,16 +139,15 @@ body{background:var(--intro-bg);transition:background .9s ease}
 </section>
 
 <script>
-/* ===== Yardımcılar ===== */
 const $ = s => document.querySelector(s);
 const show = id => document.querySelectorAll('.screen').forEach(sc=>sc.classList.toggle('show', sc.id===id));
 const openPage = id => $('#'+id).classList.add('show');
 const closePages = () => document.querySelectorAll('.page.show').forEach(p=>p.classList.remove('show'));
 
-/* 0) intro → letter */
+/* giriş → mektup */
 setTimeout(()=>{ show('letterScreen'); }, 3000);
 
-/* 1) zarf → scroll: gradyent değişsin ve aynı anda yazı başlasın */
+/* mektup → sinematik (gradyent + animasyon başla) */
 const MESSAGE = [
   "Anne…",
   "Gözlerin açılırken,",
@@ -148,27 +163,31 @@ const MESSAGE = [
   "yerinde adın var.",
   "Seni çok seviyorum. 💖"
 ];
-$('#envelope').addEventListener('click', ()=>{
-  // arka planı scroll temasına al
-  document.body.style.background = getComputedStyle(document.documentElement).getPropertyValue('--scroll-bg');
-  show('scrollScreen');
-  startScroll();
-}, {passive:true});
 
-/* 2) tek parça metin akışı */
-function startScroll(){
+$('#envelope').addEventListener('click', ()=>{
+  /* gradyenti koyu sinematik yap */
+  document.body.style.background = getComputedStyle(document.documentElement).getPropertyValue('--scroll-bg');
+
+  show('scrollScreen');
+
+  /* --- ANİMASYONU ELLE BAŞLAT (kesin çözüm) --- */
   const st = $('#scrollText');
   st.innerHTML = MESSAGE.map(l=>`<div>${l}</div>`).join('<br>');
+  st.style.animation = 'none';
+  st.offsetHeight;                 // reflow
+  st.style.animation = 'scrollUp 26s linear forwards';
+  /* -------------------------------------------- */
+
   st.addEventListener('animationend', ()=>{
-    // yazı bitti: menü temasına yumuşak geç
+    /* yazı bitince menü temasına 3sn'de geç */
     document.body.style.background = getComputedStyle(document.documentElement).getPropertyValue('--menu-bg');
     show('menu');
     bindMenu();
     fillTodayMessage();
   }, {once:true});
-}
+}, {passive:true});
 
-/* 3) menü bağla */
+/* menü */
 function bindMenu(){
   document.querySelectorAll('.tile').forEach(t=>{
     t.onclick = ()=> openPage(t.getAttribute('data-open'));
@@ -176,7 +195,7 @@ function bindMenu(){
   document.querySelectorAll('[data-back]').forEach(b=> b.onclick = closePages);
 }
 
-/* 4) günün mesajı */
+/* günün mesajı */
 const QUOTES = [
   "Bir çiçeği güneş büyütür, beni sen büyüttün.",
   "Duaların görünmez pelerinim gibi. İyi ki varsın.",
