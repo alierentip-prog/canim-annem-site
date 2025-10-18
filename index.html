@@ -5,56 +5,63 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Canım Annem 🌷🌹</title>
 <style>
+/* ---- RENK ADIMLARI ---- */
 :root{
-  --intro-bg: radial-gradient(circle at 30% 20%, #ffe6f2, #ffd3e7, #ffb3d2);
-  --scroll-bg: radial-gradient(120% 90% at 50% 10%, #6a0034 0%, #200013 100%);
-  --menu-bg: radial-gradient(120% 120% at 70% 10%, #1a121b 0%, #0e0a10 60%, #0b0810 100%);
+  /* giriş */
+  --intro-1: radial-gradient(circle at 30% 20%, #ffe6f2, #ffd3e7 40%, #ffb3d2 90%);
+  /* mektup sonrası: pembe -> koyu pembe -> bordo */
+  --scroll-1: radial-gradient(120% 100% at 50% 10%, #ffc7dd, #ff8db7 70%, #e25792 100%);
+  --scroll-2: radial-gradient(120% 100% at 50% 10%, #ff8db7, #cc3a79 70%, #8b1346 100%);
+  --scroll-3: radial-gradient(120% 100% at 50% 10%, #b21d57, #7a0e3a 70%, #42031f 100%);
+  /* menü: daha koyu tatlı bordo */
+  --menu-1: radial-gradient(120% 120% at 70% 10%, #4a243a, #2a1926 70%, #150e16 100%);
+  --menu-final: radial-gradient(120% 120% at 70% 10%, #1a121b 0%, #0e0a10 60%, #0b0810 100%);
+
   --card-grad: linear-gradient(180deg, #2b1b26, #1c121d 60%);
   --card-border:#ff9ec6;
   --text:#ffeef6;
 }
 html,body{margin:0;height:100%;overflow:hidden;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--text)}
-body{background:var(--intro-bg);transition:background 3s ease}
+body{background:var(--intro-1);transition:background 1s ease} /* her adım 1sn -> toplam 3sn */
 
-/* ortak */
+/* EKRAN KATLARI */
 .screen{position:fixed; inset:0; display:none; align-items:center; justify-content:center}
 .show{display:flex}
 
-/* 0) giriş */
+/* 0) hoş geldin */
 #welcome h1{margin:0;font-size:clamp(36px,8vw,60px);color:#a60044;text-shadow:0 2px 8px rgba(0,0,0,.18);animation:fadeOut 3s 2s forwards}
 @keyframes fadeOut{to{opacity:0;visibility:hidden}}
 
 /* 1) mektup */
 .envelope{width:min(82vw,340px);height:min(58vw,220px);background:#fff;border:3px solid #a60044;border-radius:14px;box-shadow:0 10px 40px rgba(0,0,0,.22);cursor:pointer}
 
-/* 2) satır satır büyük yazı */
-#scrollScreen{position:relative}
+/* 2) SINEMATİK: alttan yukarı akış (transform ile) */
+#scrollScreen{position:relative;overflow:hidden}
 #scrollScreen::before{
   content:"";position:absolute;inset:0;z-index:0;
-  background:radial-gradient(120% 80% at 50% -10%, transparent 60%, rgba(0,0,0,.35) 100%),
-             linear-gradient(90deg, rgba(0,0,0,.55), transparent 18%, transparent 82%, rgba(0,0,0,.55));
+  background:
+    radial-gradient(120% 80% at 50% -10%, transparent 60%, rgba(0,0,0,.35) 100%),
+    linear-gradient(90deg, rgba(0,0,0,.55), transparent 18%, transparent 82%, rgba(0,0,0,.55));
   pointer-events:none;
 }
-#lineHolder{
-  position:relative; z-index:2; text-align:center; width:100%;
-  display:flex; align-items:center; justify-content:center;
-  padding:0 4vw;
+.roller{
+  position:absolute;left:50%;bottom:-10vh;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:5vh;
+  width:92vw;max-width:1000px;will-change:transform;
+  animation:rollUp 22s linear forwards; /* tüm blok aşağıdan yukarı */
+}
+@keyframes rollUp{
+  from{ transform:translate(-50%, 105vh) }
+  to  { transform:translate(-50%, -120vh) }
 }
 .line{
-  position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
-  width:92vw; max-width:1000px; line-height:1.18; letter-spacing:.4px;
-  font-weight:900; color:#fff; text-shadow:0 6px 18px rgba(0,0,0,.75);
+  text-align:center;line-height:1.12;letter-spacing:.4px;font-weight:900;color:#fff;text-shadow:0 6px 18px rgba(0,0,0,.75);
   font-size:clamp(38px, 9vw, 92px);
-  opacity:0;
-}
-@keyframes appear {
-  0%{opacity:0; transform:translate(-50%,-52%)}
-  15%{opacity:1; transform:translate(-50%,-50%)}
-  85%{opacity:1}
-  100%{opacity:0; transform:translate(-50%,-48%)}
+  /* 3-4 kelime/satır için ortalanmış dar alan */
+  max-width: 22ch; /* satır başına ~3-4 kelime */
 }
 
-/* 3) ana menü 2-2-1 */
+/* 3) ANA MENÜ 2–2–1 */
 #menu{flex-direction:column;gap:18px;text-align:center;padding:14px}
 #menu h2{margin:0 0 8px;font-size:clamp(34px,8vw,64px);color:#ffd6ea;text-shadow:0 3px 14px rgba(0,0,0,.5)}
 .tiles{display:grid;gap:18px;width:94%;max-width:1200px;margin:0 auto;grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -64,8 +71,8 @@ body{background:var(--intro-bg);transition:background 3s ease}
 .small{font-size:clamp(16px,4.6vw,22px);opacity:.95;margin-top:8px}
 .tile.wide{grid-column:1/-1;max-width:720px;justify-self:center}
 
-/* alt sayfalar */
-.page{position:fixed;inset:0;display:none;background:var(--menu-bg);z-index:21}
+/* ALT SAYFALAR */
+.page{position:fixed;inset:0;display:none;background:var(--menu-final);z-index:21}
 .page.show{display:block}
 .page header{display:flex;align-items:center;gap:10px;padding:14px}
 .back{border:none;background:#fff;color:#a60044;border:2px solid #a60044;border-radius:999px;padding:10px 14px;font-weight:800;font-size:clamp(16px,4.8vw,20px)}
@@ -86,9 +93,9 @@ body{background:var(--intro-bg);transition:background 3s ease}
   <div id="envelope" class="envelope" title="Dokun açmak için"></div>
 </section>
 
-<!-- 2) Satır satır yazı -->
+<!-- 2) Alttan yukarı akış -->
 <section id="scrollScreen" class="screen">
-  <div id="lineHolder"></div>
+  <div id="roller" class="roller"></div>
 </section>
 
 <!-- 3) Ana menü -->
@@ -103,10 +110,10 @@ body{background:var(--intro-bg);transition:background 3s ease}
   </div>
 </section>
 
-<!-- Basit içerik sayfaları -->
+<!-- Basit sayfalar -->
 <section id="pg-anilar" class="page">
   <header><button class="back" data-back>← Geri</button><h2>📸 Anılar</h2></header>
-  <div class="content"><div class="card">Galeriyi bir sonraki adımda yeniden ekleyeceğiz.</div></div>
+  <div class="content"><div class="card">Galeriyi sonraki adımda ekleriz.</div></div>
 </section>
 <section id="pg-tarifler" class="page">
   <header><button class="back" data-back>← Geri</button><h2>🍰 Tarifler</h2></header>
@@ -114,7 +121,7 @@ body{background:var(--intro-bg);transition:background 3s ease}
 </section>
 <section id="pg-notlar" class="page">
   <header><button class="back" data-back>← Geri</button><h2>💬 Notlarım</h2></header>
-  <div class="content"><div class="card">Not defteri burada olacak.</div></div>
+  <div class="content"><div class="card">Not defteri yakında.</div></div>
 </section>
 <section id="pg-bugun" class="page">
   <header><button class="back" data-back>← Geri</button><h2>🌹 Bugün İçin Mesaj</h2></header>
@@ -131,10 +138,10 @@ const show = id => document.querySelectorAll('.screen').forEach(sc=>sc.classList
 const openPage = id => $('#'+id).classList.add('show');
 const closePages = () => document.querySelectorAll('.page.show').forEach(p=>p.classList.remove('show'));
 
-/* 0) intro → letter */
+/* 0) intro → mektup */
 setTimeout(()=>{ show('letterScreen'); }, 3000);
 
-/* Yazı: tek tek büyük satırlar */
+/* yazılar (3-4 kelime/satır olacak şekilde) */
 const LINES = [
   "Anne…",
   "Gözlerin açılırken,",
@@ -150,51 +157,35 @@ const LINES = [
   "yerinde adın var.",
   "Seni çok seviyorum. 💖"
 ];
-const LINE_MS = 1800; // her satır süresi
 
 $('#envelope').addEventListener('click', ()=>{
-  // 1) arka plan yavaşça koyuya geçsin
-  document.body.style.background =
-    getComputedStyle(document.documentElement).getPropertyValue('--scroll-bg');
+  // 1) pembe -> koyu pembe -> bordo (1sn + 1sn + 1sn)
+  document.body.style.background = getComputedStyle(document.documentElement).getPropertyValue('--scroll-1');
+  setTimeout(()=>document.body.style.background = getComputedStyle(document.documentElement).getPropertyValue('--scroll-2'), 1000);
+  setTimeout(()=>document.body.style.background = getComputedStyle(document.documentElement).getPropertyValue('--scroll-3'), 2000);
 
-  // 2) yazı ekranını göster
+  // 2) akış ekranını göster ve satırları yerleştir
   show('scrollScreen');
+  const r = $('#roller'); r.innerHTML = '';
+  LINES.forEach(t=>{
+    const d = document.createElement('div');
+    d.className = 'line';
+    d.textContent = t;
+    r.appendChild(d);
+  });
 
-  // 3) 0.5 sn sonra satırlar başlasın (geçişin başladığı belli olsun)
-  setTimeout(runLines, 500);
+  // 3) animasyon bittiğinde menü gradyenti adımları ve menü
+  r.addEventListener('animationend', ()=>{
+    // bordo -> menü-1 -> menü-final
+    document.body.style.background = getComputedStyle(document.documentElement).getPropertyValue('--menu-1');
+    setTimeout(()=>document.body.style.background = getComputedStyle(document.documentElement).getPropertyValue('--menu-final'), 1000);
+    show('menu'); bindMenu(); fillTodayMessage();
+  }, {once:true});
 }, {passive:true});
 
-function runLines(){
-  const holder = $('#lineHolder');
-  holder.innerHTML = ""; // temizle
-  let i = 0;
-
-  const tick = () => {
-    if (i >= LINES.length){
-      // son satır bitti: menü temasına geç ve menüyü aç
-      document.body.style.background =
-        getComputedStyle(document.documentElement).getPropertyValue('--menu-bg');
-      show('menu');
-      bindMenu();
-      fillTodayMessage();
-      return;
-    }
-    const div = document.createElement('div');
-    div.className = 'line';
-    div.textContent = LINES[i++];
-    // animasyonu her seferinde taze başlat
-    div.style.animation = 'appear '+(LINE_MS/1000)+'s ease both';
-    holder.appendChild(div);
-    setTimeout(()=>{ holder.removeChild(div); tick(); }, LINE_MS);
-  };
-  tick();
-}
-
-/* menü */
+/* menü bağlama */
 function bindMenu(){
-  document.querySelectorAll('.tile').forEach(t=>{
-    t.onclick = ()=> openPage(t.getAttribute('data-open'));
-  });
+  document.querySelectorAll('.tile').forEach(t=>{ t.onclick = ()=> openPage(t.getAttribute('data-open')); });
   document.querySelectorAll('[data-back]').forEach(b=> b.onclick = closePages);
 }
 
@@ -212,4 +203,4 @@ function fillTodayMessage(){
 }
 </script>
 </body>
-</html>
+      </html>
