@@ -5,125 +5,264 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Canım Annem 💐</title>
 <style>
-/* ---- RENKLER ---- */
+/* ====== RENKLER / TEMA ====== */
 :root{
-  --bordo: #4a0d2a;         /* sabit bordo arka plan */
-  --koyuKrem: #f7e9d8;      /* metin rengi */
-  --pembeGolge: #ff8fb3;    /* metin gölgesi */
-  --logoPembe: #ff9ec6;
-  --logoCizgi: #ffcfe0;
-  --logoPariltı: rgba(255, 158, 198, .35);
+  --bordo:#4a0d2a;
+  --krem:#f7e9d8;
+  --pembe:#ff9ec6;
+  --pembe-glow:rgba(255,158,198,.35);
+  --koyu:#1a0a12;
+
+  --card-grad:linear-gradient(180deg,#2b1b26,#1c121d 60%);
+  --card-border:#ff9ec6;
 }
+html,body{margin:0;height:100%;background:var(--bordo);color:var(--krem);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;overflow:hidden}
 
-/* genel */
-html,body{margin:0;height:100%;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bordo);color:var(--koyuKrem);overflow:hidden}
-
-/* ekran katmanları */
-.screen{position:fixed; inset:0; display:none; align-items:center; justify-content:center}
+/* ortak katman mantığı */
+.screen{position:fixed;inset:0;display:none;align-items:center;justify-content:center}
 .show{display:flex}
 
-/* 1) GİRİŞ – DAİRE LOGO */
+/* ====== 1) LOGO – “en iyi giriş” ====== */
 #splash{background:var(--bordo)}
-.logoWrap{
-  position:relative; width:min(86vw, 420px); aspect-ratio:1/1;
-  display:grid; place-items:center;
+.logo{
+  position:relative;width:min(88vw,460px);aspect-ratio:1/1;display:grid;place-items:center;
+  filter:drop-shadow(0 12px 34px rgba(0,0,0,.35));
 }
-.circle{
-  width:100%; height:100%; border-radius:50%;
-  background: radial-gradient(120% 120% at 50% 30%, #5f183a 0%, #4a0d2a 60%, #3a0920 100%);
-  border:4px solid var(--logoCizgi);
-  box-shadow:
-    0 0 26px var(--logoPariltı),
-    inset 0 0 24px rgba(255,255,255,.08);
-  animation: pulse 2.2s ease-in-out infinite;
+/* dış halo */
+.halo{
+  position:absolute;inset:-12%;border-radius:50%;
+  background:radial-gradient(120% 120% at 50% 30%, #6a2145 0%, #4a0d2a 60%, #37091d 100%);
+  box-shadow:0 0 50px var(--pembe-glow), inset 0 0 28px rgba(255,255,255,.08);
+  animation:breath 3.4s ease-in-out infinite;
 }
-@keyframes pulse{
-  0%,100%{ transform:scale(1); box-shadow:0 0 26px var(--logoPariltı), inset 0 0 24px rgba(255,255,255,.08) }
-  50%{ transform:scale(1.03); box-shadow:0 0 46px var(--logoPariltı), inset 0 0 32px rgba(255,255,255,.10) }
+@keyframes breath{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.04)}
 }
-.logoText{
-  position:absolute; text-align:center; line-height:1.04; font-weight:900; letter-spacing:.6px;
-  color:#fff; text-shadow: 0 6px 18px rgba(0,0,0,.55), 0 0 2px #fff;
+/* iç ana daire */
+.core{
+  position:absolute;inset:6%;border-radius:50%;
+  background:radial-gradient(100% 100% at 50% 35%, #5b173b 0%, #420e28 70%, #2b0a1a 100%);
+  border:4px solid #ffd4e6;
 }
-.logoTop{ font-size: clamp(34px, 8vw, 64px); transform:translateY(-28%) }
-.logoBottom{ font-size: clamp(40px, 9.5vw, 76px); transform:translateY(28%) }
+/* dönen ince halka */
+.ring{
+  position:absolute;inset:0;border-radius:50%;
+  background:
+    conic-gradient(from 0deg, transparent 0 70deg, rgba(255,255,255,.35) 90deg 120deg, transparent 140deg 200deg, rgba(255,158,198,.5) 220deg 260deg, transparent 280deg 360deg);
+  mask:radial-gradient(farthest-side, transparent 56%, #000 58%);
+  animation:spin 5s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* yörüngede dönen ışıltılar */
 .spark{
-  position:absolute; width:10px; height:10px; border-radius:50%;
-  background:var(--logoPembe); filter:blur(.4px); opacity:.9;
-  box-shadow:0 0 12px var(--logoPembe), 0 0 22px var(--logoPembe);
-  animation: float 3s linear infinite;
+  position:absolute;width:12px;height:12px;border-radius:50%;background:#ffd0e3;box-shadow:0 0 16px #ffd0e3, 0 0 30px #ffd0e3;
+  top:50%;left:50%;transform:translate(-50%,-50%);
+  animation:orbit var(--t,6s) linear infinite;
 }
-@keyframes float{
-  from{ transform:translate(var(--sx,0), var(--sy,0)) scale(1) ; opacity:.95 }
-  to  { transform:translate(calc(var(--sx,0) * 1.4), calc(var(--sy,0) * -1.4)) scale(.7); opacity:.15 }
+.spark::after{content:"";position:absolute;inset:0;border-radius:50%;background:#fff;filter:blur(1px)}
+@keyframes orbit{
+  from{transform:translate(-50%,-50%) rotate(0deg) translate(var(--r,140px))}
+  to{transform:translate(-50%,-50%) rotate(360deg) translate(var(--r,140px))}
 }
 
-/* 2) MESAJ EKRANI */
-#message{background:var(--bordo); padding:4vw}
-.msg{
-  max-width: min(92vw, 1100px);
-  margin:auto; text-align:center;
-  font-weight:900; letter-spacing:.6px; line-height:1.18;
-  /* çok büyük ve görünür: */
-  font-size: clamp(36px, 8.8vw, 94px);
-  color: var(--koyuKrem);
-  text-shadow:
-     0 0 0 var(--pembeGolge),
-     0 .06em 0 var(--pembeGolge),
-     .02em .1em .06em rgba(0,0,0,.45);
-  animation: fadeIn .9s ease both;
+/* çiçek yaprakları (nazik açılma) */
+.petal{
+  position:absolute;width:22px;height:38px;border-radius:14px 14px 14px 14px/20px 20px 18px 18px;
+  background:radial-gradient(80% 100% at 50% 0%, #ffd5e7 0%, #ffb4cf 60%, #ff8fb3 100%);
+  top:50%;left:50%;transform-origin:50% 90%;
+  filter:drop-shadow(0 2px 6px rgba(0,0,0,.25));
+  opacity:0;animation:open 1.4s ease forwards var(--d,0s);
 }
-@keyframes fadeIn{ from{opacity:0; transform:translateY(10px)} to{opacity:1; transform:translateY(0)} }
+@keyframes open{
+  0%{transform:translate(-50%,-50%) rotate(var(--rot,0)) scale(.2);opacity:0}
+  60%{opacity:1}
+  100%{transform:translate(-50%,-58%) rotate(var(--rot,0)) scale(1)}
+}
 
-/* erişilebilirlik: hareket azalt */
-@media (prefers-reduced-motion: reduce){
-  .circle,.spark{ animation:none }
-  .msg{ animation:none }
+/* metin */
+.logoText{
+  position:absolute;text-align:center;font-weight:1000;letter-spacing:.8px;color:#fff;text-shadow:0 12px 28px rgba(0,0,0,.6),0 0 3px #fff;
+}
+.top{font-size:clamp(40px,8.4vw,72px);transform:translateY(-34%)}
+.bottom{font-size:clamp(46px,9.8vw,86px);transform:translateY(34%)}
+.space{display:block;height:clamp(10px,2.6vw,18px)} /* extra boşluk */
+
+/* ====== 2) KAYAN PARAGRAF ====== */
+#scroll{background:var(--bordo);overflow:hidden}
+.scrollWrap{position:relative;inset:0;width:100%;height:100%;}
+.credits{
+  position:absolute;left:50%;bottom:-8vh;transform:translateX(-50%);
+  width:92vw;max-width:1100px;text-align:center;
+  will-change:transform;
+}
+.credits p{
+  margin:0 0 5vh 0;
+  font-size:clamp(28px,6.8vw,46px);
+  font-weight:900;line-height:1.2;letter-spacing:.5px;
+  color:var(--krem);
+  text-shadow:0 .08em 0 #ff8fb3, .02em .12em .08em rgba(0,0,0,.45);
+}
+
+/* ====== 3) ANA MENÜ (2×2 + 1) ====== */
+#menu{flex-direction:column;gap:18px;text-align:center;padding:14px;background:var(--bordo)}
+#menu h2{margin:0 0 8px;font-size:clamp(34px,8vw,64px);color:#ffd6ea;text-shadow:0 3px 14px rgba(0,0,0,.5)}
+.tiles{display:grid;gap:18px;width:94%;max-width:1200px;margin:0 auto;grid-template-columns:repeat(2,minmax(0,1fr))}
+.tile{min-height:190px;border:3px solid var(--card-border);border-radius:24px;background:var(--card-grad);box-shadow:0 18px 48px rgba(255,120,180,.18),inset 0 0 0 1px rgba(255,255,255,.05);color:#ffeef6;display:flex;flex-direction:column;align-items:center;justify-content:center;text-decoration:none;transition:transform .2s}
+.tile:active{transform:scale(.98)}
+.big{font-size:clamp(28px,7.2vw,44px);font-weight:1000;letter-spacing:.6px}
+.small{font-size:clamp(16px,4.6vw,22px);opacity:.95;margin-top:8px}
+.tile.wide{grid-column:1/-1;max-width:720px;justify-self:center}
+
+/* alt sayfalar */
+.page{position:fixed;inset:0;display:none;background:var(--bordo);z-index:21}
+.page.show{display:block}
+.page header{display:flex;align-items:center;gap:10px;padding:14px}
+.back{border:none;background:#fff;color:#a60044;border:2px solid #a60044;border-radius:999px;padding:10px 14px;font-weight:800;font-size:clamp(16px,4.8vw,20px)}
+.page h2{margin:0 auto;color:#ffd6ea;font-size:clamp(24px,6vw,34px)}
+.page .content{padding:16px;height:calc(100% - 64px);overflow:auto;font-size:clamp(18px,4.6vw,24px)}
+.card{background:var(--card-grad);border:2px solid var(--card-border);border-radius:16px;box-shadow:0 10px 24px rgba(255,105,165,.12);padding:14px}
+
+@media (prefers-reduced-motion:reduce){
+  .halo,.ring,.spark,.petal{animation:none}
 }
 </style>
 </head>
 <body>
 
-<!-- 1) Splash / Logo -->
+<!-- 1) LOGO -->
 <section id="splash" class="screen show" aria-label="Giriş logosu">
-  <div class="logoWrap">
-    <div class="circle"></div>
-    <div class="logoText logoTop">Canım</div>
-    <div class="logoText logoBottom">Annem 💐</div>
+  <div class="logo">
+    <div class="halo"></div>
+    <div class="core"></div>
+    <div class="ring"></div>
 
-    <!-- birkaç ışıltı -->
-    <div class="spark" style="--sx:-90px; --sy:40px; top:18%; left:20%"></div>
-    <div class="spark" style="--sx:80px; --sy:60px; top:22%; right:18%"></div>
-    <div class="spark" style="--sx:-70px; --sy:70px; bottom:18%; left:24%"></div>
-    <div class="spark" style="--sx:60px; --sy:40px; bottom:22%; right:22%"></div>
+    <!-- çiçek yaprakları -->
+    <div class="petal" style="--rot:-40deg; --d:.2s"></div>
+    <div class="petal" style="--rot:-10deg; --d:.35s"></div>
+    <div class="petal" style="--rot:20deg;  --d:.5s"></div>
+    <div class="petal" style="--rot:50deg;  --d:.65s"></div>
+
+    <!-- yörüngedeki ışıltılar -->
+    <div class="spark" style="--r:150px; --t:6s"></div>
+    <div class="spark" style="--r:110px; --t:5s"></div>
+    <div class="spark" style="--r:90px;  --t:7s"></div>
+
+    <!-- metin -->
+    <div class="logoText top">Canım<span class="space"></span></div>
+    <div class="logoText bottom">Annem 💐</div>
   </div>
 </section>
 
-<!-- 2) Mesaj (mektup yok, sadece metin) -->
-<section id="message" class="screen" aria-label="Açılış mesajı">
-  <div class="msg" id="msgText">
-    Anne…<br>
-    Kalbimin en sıcak yeri,<br>
-    senin adın.<br>
-    İyi ki varsın. 💖
+<!-- 2) KAYAN PARAGRAF -->
+<section id="scroll" class="screen" aria-label="Açılış yazısı">
+  <div class="scrollWrap">
+    <div id="credits" class="credits"></div>
   </div>
+</section>
+
+<!-- 3) ANA MENÜ -->
+<section id="menu" class="screen" aria-label="Ana menü">
+  <h2>💖 Ana Menü 💖</h2>
+  <div class="tiles">
+    <a class="tile" data-open="pg-anilar"><div class="big">📸 Anılar</div><div class="small">Zaman yolculuğu</div></a>
+    <a class="tile" data-open="pg-tarifler"><div class="big">🍰 Tarifler</div><div class="small">Lezzet defteri</div></a>
+    <a class="tile" data-open="pg-notlar"><div class="big">💬 Notlarım</div><div class="small">Sana yazdıklarım</div></a>
+    <a class="tile" data-open="pg-bugun"><div class="big">🌹 Bugün Mesaj</div><div class="small">Bir tebessüm</div></a>
+    <a class="tile wide" data-open="pg-hakkinda"><div class="big">ℹ️ Hakkında</div><div class="small">Küçük hediye</div></a>
+  </div>
+</section>
+
+<!-- Basit alt sayfalar -->
+<section id="pg-anilar" class="page">
+  <header><button class="back" data-back>← Geri</button><h2>📸 Anılar</h2></header>
+  <div class="content"><div class="card">Galeriyi sonraki adımda ekleriz.</div></div>
+</section>
+<section id="pg-tarifler" class="page">
+  <header><button class="back" data-back>← Geri</button><h2>🍰 Tarifler</h2></header>
+  <div class="content"><div class="card">Tarif kartları burada olacak.</div></div>
+</section>
+<section id="pg-notlar" class="page">
+  <header><button class="back" data-back>← Geri</button><h2>💬 Notlarım</h2></header>
+  <div class="content"><div class="card">Not defteri yakında.</div></div>
+</section>
+<section id="pg-bugun" class="page">
+  <header><button class="back" data-back>← Geri</button><h2>🌹 Bugün İçin Mesaj</h2></header>
+  <div class="content" id="msgArea"></div>
+</section>
+<section id="pg-hakkinda" class="page">
+  <header><button class="back" data-back>← Geri</button><h2>ℹ️ Hakkında</h2></header>
+  <div class="content"><div class="card">Bu site “Canım Annem”e sevgiyle hazırlandı.</div></div>
 </section>
 
 <script>
-/* Splash -> 3.4 sn sonra Mesaj ekranına geç */
-const SPLASH_MS = 3400;  // 3–4 sn arası
-setTimeout(()=>{
-  document.getElementById('splash').classList.remove('show');
-  document.getElementById('message').classList.add('show');
-}, SPLASH_MS);
+const $ = s => document.querySelector(s);
+const show = id => document.querySelectorAll('.screen').forEach(sc=>sc.classList.toggle('show', sc.id===id));
+const openPage = id => $('#'+id).classList.add('show');
+const closePages = () => document.querySelectorAll('.page.show').forEach(p=>p.classList.remove('show'));
 
-/* Mesaj metnini değiştirmek istersen: */
-window.setOpeningText = function(lines){
-  document.getElementById('msgText').innerHTML = lines.join('<br>');
-};
-/* örnek kullanım:
-   setOpeningText(["Anne…","Gözlerin gülünce","evim aydınlanır.","Seni seviyorum 💖"]);
-*/
+/* 1) Splash süresi (4.5 sn), sonra kayan yazı */
+const SPLASH_MS = 4500;
+setTimeout(()=>{ show('scroll'); startCredits(); }, SPLASH_MS);
+
+/* 2) Kayan paragraf – içerik + süre ayarı  */
+const PARAGRAPH = `Anne; senin yanında zaman yavaşlıyor, kalbim huzur buluyor. 
+Gözlerin güldüğünde evim aydınlanıyor, sesinle her şey yoluna giriyor. 
+Küçük dokunuşların büyük bir dünyaya bedel; yorgunluklarım eriyor, 
+umutlarım çoğalıyor. Bugün ve her gün, iyi ki varsın; 
+beni olduğum hâliyle sevdin, sarıp sarmaladın. 
+Sana duyduğum minneti kelimeler hep eksik anlatır; 
+yine de söylemek isterim: kalbimin en güzel yerinde adın yazılı. 
+Seni çok seviyorum.`;
+
+function startCredits(){
+  const box = $('#credits'); box.innerHTML = "";
+  // paragrafı 3-4 kelimelik satırlara yakın olacak şekilde <p> bloklarına böl
+  const words = PARAGRAPH.split(/\s+/).filter(Boolean);
+  let line = [];
+  const push = () => { const p=document.createElement('p'); p.textContent=line.join(' '); box.appendChild(p); line=[]; };
+  words.forEach(w=>{
+    line.push(w);
+    if(line.join(' ').length>18){ push(); }
+  });
+  if(line.length) push();
+
+  // Süreyi içeriğe göre belirle (px/saniye ~ 40)
+  setTimeout(()=>{ // layout ölçümü
+    const h = box.scrollHeight;                // toplam içerik yüksekliği
+    const view = window.innerHeight;
+    const distance = h + view*1.1;             // alttan girip üstten çıkış
+    const seconds = Math.max(16, Math.min(60, distance/40)); // 16–60 sn arası
+    box.animate(
+      [{ transform:`translate(-50%, ${view*1.05}px)` },
+       { transform:`translate(-50%, ${-h - view*0.1}px)` }],
+      { duration: seconds*1000, easing:'linear', fill:'forwards' }
+    ).addEventListener('finish', ()=>{ show('menu'); bindMenu(); fillTodayMessage(); });
+  },0);
+}
+
+/* menü bağlama */
+function bindMenu(){
+  document.querySelectorAll('.tile').forEach(t=> t.onclick = ()=> openPage(t.getAttribute('data-open')));
+  document.querySelectorAll('[data-back]').forEach(b=> b.onclick = closePages);
+}
+
+/* günün mesajı */
+const QUOTES = [
+  "Bir çiçeği güneş büyütür, beni sen büyüttün.",
+  "Duaların görünmez pelerinim gibi. İyi ki varsın.",
+  "Gülüşün evime huzur, sözlerin yoluma ışık.",
+  "Her güzel hatıramın içinde sen varsın.",
+  "Anne eli değen her şey güzelleşir."
+];
+function fillTodayMessage(){
+  const q = QUOTES[Math.floor(Math.random()*QUOTES.length)];
+  $('#msgArea').innerHTML = `<div class="card" style="font-weight:900;font-size:clamp(22px,5.5vw,28px)">${q}</div>`;
+}
+
+/* dışarıdan metni değiştirmek istersen: window.setParagraph("..."); */
+window.setParagraph = txt => { window.location.hash=""; window.PARAGRAPH = txt; }
 </script>
 </body>
-</html>
+  </html>
