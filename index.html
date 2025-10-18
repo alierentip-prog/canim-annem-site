@@ -1,16 +1,286 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="tr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Canım Annem</title>
-  <meta http-equiv="refresh" content="0; url=logo.html">
-  <style>
-    html,body{height:100%;margin:0;background:#2A0114;display:grid;place-items:center;color:#fff;font:600 16px system-ui}
-    a{color:#ffd}
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Canım Annem</title>
+<style>
+/* ---------- PALET ---------- */
+:root{
+  --bg:#150514;          /* koyu bordo */
+  --lav:#CDA6FF;         /* lila yazı */
+  --lav-glow:#CDA6FF66;
+  --pink:#F7A3C4;        /* açık pembe */
+  --pink2:#E782B0;       /* ikinci pembe */
+  --ring:#FFFFFF;
+  --card:#241024;        /* menü kartı */
+  --card-b:#3a1a3a;
+  --txt:#ffffff;
+}
+
+/* ---------- GENEL ---------- */
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;background:var(--bg);color:var(--txt);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial}
+button{cursor:pointer}
+.hidden{display:none!important}
+.center{position:absolute;inset:0;display:grid;place-items:center}
+
+/* ---------- BALONCUK CANVAS (logo sahnesi) ---------- */
+canvas#bubbles{position:absolute;inset:0;z-index:0;filter:blur(.2px)}
+
+/* ---------- LOGO SAHNESİ ---------- */
+#sceneLogo{position:absolute;inset:0}
+.logo{position:relative;width:min(84vmin,560px);aspect-ratio:1/1}
+svg{position:absolute;inset:0;width:100%;height:100%}
+.arc1{stroke:var(--pink); stroke-width:10; stroke-linecap:round; fill:none;
+      stroke-dasharray: 320 1000; transform-origin:50% 50%;
+      animation:spin 10s linear infinite; filter:drop-shadow(0 0 8px #f7a3c455)}
+.arc2{stroke:var(--pink2); stroke-width:10; stroke-linecap:round; fill:none;
+      stroke-dasharray: 320 1000; transform-origin:50% 50%;
+      animation:spin 12s linear infinite reverse; filter:drop-shadow(0 0 10px #e782b055)}
+.innerRing{stroke:var(--ring); stroke-width:5; fill:none; opacity:.95;
+           filter:drop-shadow(0 0 6px #ffffff90)}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.title{position:absolute;inset:0;display:grid;place-items:center;text-align:center;text-shadow:0 1px 0 #000,0 0 18px #ffffff80}
+.title h1{margin:0;line-height:1.05;font-weight:800;font-size:clamp(36px,7.8vmin,78px)}
+.title .gap{height:.25em}
+.flower{display:block;font-size:clamp(28px,5vmin,48px);margin-top:.15em}
+
+.star{position:absolute;width:22px;height:22px;color:#fff;opacity:.9;filter:drop-shadow(0 0 8px #ffffffaa)}
+.star:before,.star:after{content:"";position:absolute;inset:0;margin:auto;background:currentColor;transform-origin:center}
+.star:before{width:2px;height:100%;border-radius:2px}
+.star:after{height:2px;width:100%;border-radius:2px}
+.star.s1{top:20%;left:35%;animation:twinkle 1.6s ease-in-out infinite}
+.star.s2{bottom:24%;right:28%;animation:twinkle 2.1s ease-in-out .3s infinite}
+@keyframes twinkle{0%,100%{transform:scale(.6) rotate(0);opacity:.2}50%{transform:scale(1.35) rotate(45deg);opacity:1}}
+
+.flash{position:absolute;inset:0;background:#fff;opacity:0;z-index:3;pointer-events:none}
+.flash.run{animation:flash 900ms ease both}
+@keyframes flash{0%{opacity:0}35%{opacity:1}100%{opacity:0}}
+
+/* ---------- SLAYT SAHNESİ ---------- */
+#sceneSlide{position:absolute;inset:0;overflow:hidden}
+.bgSpace{
+  position:absolute;inset:0;z-index:0;
+  background:
+    radial-gradient(2px 2px at 12% 18%, #ff7ab380 0 2px, transparent 3px) repeat,
+    radial-gradient(2px 2px at 72% 48%, #ffb7d180 0 2px, transparent 3px) repeat,
+    radial-gradient(2px 2px at 32% 78%, #ff9ec780 0 2px, transparent 3px) repeat,
+    radial-gradient(2px 2px at 52% 8%,  #ffc8dd80 0 2px, transparent 3px) repeat,
+    var(--bg);
+  background-size: 320px 240px, 280px 300px, 260px 260px, 300px 360px, 100% 100%;
+  animation: dustMove 60s linear infinite;
+}
+@keyframes dustMove{
+  0%{background-position:0 0,0 0,0 0,0 0,0 0}
+  100%{background-position:320px 240px,-280px 300px,260px -260px,-300px -360px,0 0}
+}
+.sun{
+  position:absolute; width:42vmin; aspect-ratio:1/1; border-radius:50%;
+  background: radial-gradient(circle at 45% 45%, #fff8 0 20%, #fff0 60%),
+              radial-gradient(circle, #fde7b8 0 30%, #f7d78f 45%, #a8843e00 70%);
+  filter:blur(0.2px);
+  right:8%; top:20%;
+  animation: orbit 42s ease-in-out infinite;
+}
+@keyframes orbit{
+  0%  { transform: translate(0,0) }
+  50% { transform: translate(-4vmin, 2vmin) }
+  100%{ transform: translate(0,0) }
+}
+
+.slideWrap{position:absolute;inset:0;display:grid;place-items:center;z-index:1}
+.slideBox{
+  width:min(920px, 95vw);
+  text-align:center;
+  color:var(--lav);
+  text-shadow:0 0 22px var(--lav-glow), 0 2px 0 #000;
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-weight:800;
+  letter-spacing:.04em;
+  line-height:1.5;
+  filter: drop-shadow(0 0 12px #0005);
+}
+.slideText{
+  display:inline-block; white-space:pre-line;
+  font-size: clamp(24px, 6.8vw, 54px);
+  transform: translateY(100vh);
+  animation: scrollUp var(--scrollDur, 42s) linear forwards;
+}
+@keyframes scrollUp{
+  from{ transform: translateY(100vh) }
+  to  { transform: translateY(-120%) }
+}
+.ctrls{position:absolute;top:14px;right:14px;z-index:2}
+.ctrls button{
+  background:#2b142c; border:1px solid #5a2b5a; color:#fff; padding:8px 12px;
+  border-radius:999px; font-weight:600; font-size:13px; opacity:.85
+}
+.ctrls button:hover{opacity:1}
+
+/* ---------- MENÜ SAHNESİ ---------- */
+#sceneMenu{position:absolute;inset:0;overflow:auto;padding:6vmin 5vmin}
+.menuTitle{
+  text-align:center; font-size:clamp(28px,6.5vw,48px); font-weight:800;
+  margin:0 0 18px; color:#ffd1e6; text-shadow:0 0 18px #ff9dc755
+}
+.grid{
+  display:grid; gap:16px;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  max-width:1100px; margin:0 auto;
+}
+.card{
+  background:linear-gradient(180deg,#2a122a 0,#1c0a1c 100%);
+  border:1px solid var(--card-b); border-radius:18px; padding:20px 18px;
+  box-shadow: 0 8px 30px #0006, inset 0 0 0 1px #ffffff10;
+  transition: transform .12s ease, box-shadow .12s ease;
+  font-size:clamp(18px,4.6vw,28px); font-weight:800;
+}
+.card small{display:block; font-weight:500; opacity:.8; margin-top:6px; font-size:.55em}
+.card:active{transform:scale(.98)}
+.card--full{grid-column:1/-1}
+
+/* 2×2 + 1 düzen mobilde de büyük kalsın */
+@media (max-width:640px){
+  .grid{grid-template-columns:1fr}
+  .card--full{grid-column:auto}
+}
+</style>
 </head>
 <body>
-  Yönlendiriliyor… Eğer açılmazsa <a href="logo.html">buraya dokun</a>.
+
+<!-- ================== SAHNE 1: LOGO ================== -->
+<section id="sceneLogo">
+  <canvas id="bubbles"></canvas>
+  <div class="center">
+    <div class="logo" aria-label="Canım Annem logosu">
+      <svg viewBox="0 0 100 100" aria-hidden="true">
+        <circle class="arc1" cx="50" cy="50" r="44"/>
+        <circle class="arc2" cx="50" cy="50" r="44"/>
+        <circle class="innerRing" cx="50" cy="50" r="36"/>
+      </svg>
+      <div class="title">
+        <div>
+          <h1>Canım</h1>
+          <div class="gap"></div>
+          <h1>Annem</h1>
+          <span class="flower">💐</span>
+        </div>
+      </div>
+      <div class="star s1"></div>
+      <div class="star s2"></div>
+    </div>
+  </div>
+  <div id="flash" class="flash"></div>
+</section>
+
+<!-- ================== SAHNE 2: SLAYT ================== -->
+<section id="sceneSlide" class="hidden" aria-live="polite">
+  <div class="bgSpace"></div>
+  <div class="sun" aria-hidden="true"></div>
+  <div class="ctrls">
+    <button id="btnSkip">Yazıyı Geç</button>
+  </div>
+  <div class="slideWrap">
+    <div class="slideBox">
+      <div id="slideText" class="slideText"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================== SAHNE 3: MENÜ ================== -->
+<section id="sceneMenu" class="hidden">
+  <h2 class="menuTitle">💖 Ana Menü 💖</h2>
+  <div class="grid">
+    <a class="card" href="#"><span>📸 Anılar</span><small>Zaman yolculuğu</small></a>
+    <a class="card" href="#"><span>🍰 Tarifler</span><small>Lezzet defteri</small></a>
+    <a class="card" href="#"><span>💬 Notlarım</span><small>Sana yazdıklarım</small></a>
+    <a class="card" href="#"><span>🌹 Bugün Mesaj</span><small>Bir tebessüm</small></a>
+    <a class="card card--full" href="#"><span>ℹ️ Hakkında</span><small>Küçük hediye</small></a>
+  </div>
+</section>
+
+<script>
+/* ===== Baloncuk animasyonu (logo) ===== */
+(function(){
+  const c = document.getElementById('bubbles');
+  const ctx = c.getContext('2d');
+  let W,H,DPR=Math.max(1,Math.min(2,devicePixelRatio||1));
+  const balls=[];
+  function size(){
+    W=c.width=Math.floor(innerWidth*DPR);
+    H=c.height=Math.floor(innerHeight*DPR);
+    c.style.width=innerWidth+'px'; c.style.height=innerHeight+'px';
+    balls.length=0;
+    const n=Math.min(36, Math.floor(innerWidth/30));
+    for(let i=0;i<n;i++){
+      balls.push({x:Math.random()*W,y:Math.random()*H,r:(Math.random()*18+12)*DPR,
+                  a:Math.random()*Math.PI*2,s:0.12+Math.random()*0.35,
+                  col:`rgba(255,255,255,${0.10+Math.random()*0.18})`});
+    }
+  }
+  function tick(){
+    ctx.clearRect(0,0,W,H);
+    for(const b of balls){
+      b.a+=(Math.random()-.5)*0.03; b.x+=Math.cos(b.a)*b.s; b.y+=Math.sin(b.a)*b.s;
+      if(b.x<-b.r) b.x=W+b.r; else if(b.x>W+b.r) b.x=-b.r;
+      if(b.y<-b.r) b.y=H+b.r; else if(b.y>H+b.r) b.y=-b.r;
+      const g=ctx.createRadialGradient(b.x-b.r*.3,b.y-b.r*.3,b.r*.15,b.x,b.y,b.r);
+      g.addColorStop(0,b.col); g.addColorStop(1,'rgba(255,255,255,0)');
+      ctx.fillStyle=g; ctx.beginPath(); ctx.arc(b.x,b.y,b.r,0,Math.PI*2); ctx.fill();
+    }
+    requestAnimationFrame(tick);
+  }
+  addEventListener('resize',size); size(); tick();
+})();
+
+/* ===== Akış kontrol ===== */
+const sceneLogo  = document.getElementById('sceneLogo');
+const sceneSlide = document.getElementById('sceneSlide');
+const sceneMenu  = document.getElementById('sceneMenu');
+const flash      = document.getElementById('flash');
+const slideText  = document.getElementById('slideText');
+
+const METIN = `ANNE;
+SENİN GÜLÜŞÜNLE BAŞLIYOR GÜNÜM,
+SENİN SESİNLE SAKİNLEŞİYOR KALBİM.
+DÜNYA KARIŞSA DA, SENİN VARLIĞIN HER ŞEYİ DÜZENE SOKUYOR.
+KÜÇÜK BİR BAKIŞIN, EN ZOR ANIMDA UMUT OLUYOR.
+ELİNİN SICAKLIĞI, BİR EVİ DEĞİL, BİR HAYATI ISITIYOR.
+
+SEN YORGUN DÜŞSEN DE, GÜCÜNÜ SEVGİDEN ALIYORSUN.
+HER ADIMIMDA SENİN EMEĞİN, HER NEFESİMDE SENİN DUANI TAŞIYORUM.
+BEN NE KADAR BÜYÜSEM DE, SENİN YANINDA HÂLÂ O KÜÇÜK ÇOCUĞUM.
+
+KALBİMİN EN DERİNİNDE SENİN KOKUN VAR,
+O KOKU, DÜNYADAKİ HER ŞEYE BEDEN.
+İYİ Kİ VARSIN ANNE…
+İYİ Kİ SENİN EVLADINIM`;
+
+function showSlide(){
+  sceneLogo.classList.add('hidden');
+  sceneSlide.classList.remove('hidden');
+  slideText.textContent = METIN;
+  // slayt süresi: metin uzunluğuna göre yaklaşık
+  const dur = Math.max(36, Math.min(65, Math.round(METIN.length/10)));
+  document.documentElement.style.setProperty('--scrollDur', dur+'s');
+  // Otomatik menüye geçiş
+  setTimeout(showMenu, (dur*1000)+800);
+}
+function showMenu(){
+  sceneSlide.classList.add('hidden');
+  sceneMenu.classList.remove('hidden');
+}
+
+// Logo -> flaş -> slayt
+setTimeout(()=>{
+  flash.classList.add('run');
+  setTimeout(showSlide, 900);
+}, 3500);
+
+// "Yazıyı Geç" butonu
+document.getElementById('btnSkip').addEventListener('click', showMenu);
+</script>
 </body>
 </html>
