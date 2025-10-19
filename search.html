@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Arama | Canım Annem</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#2b0f23; --bordo:#2b0e23; --header:#5b0f2d; --paper:#fffdfd;
+  --chip:#ffd6e8; --chipText:#5b0f2d; --card:#fff; --stroke:#f2c6da; --shadow:0 10px 30px #8a0f3040;
+}
+*{box-sizing:border-box} body{margin:0;font-family:Poppins,system-ui;background:#fff8fb;color:var(--ink)}
+.header{position:sticky;top:0;background:linear-gradient(180deg,var(--header),#450a23);color:#ffe9f2;box-shadow:0 6px 18px #450a2340}
+.header__in{max-width:1100px;margin:0 auto;padding:16px 18px;display:flex;gap:12px;align-items:center}
+.title{font-weight:900;letter-spacing:.3px}
+.search{max-width:1100px;margin:18px auto;padding:0 18px}
+.searchbar{display:flex;gap:8px}
+input[type=search]{flex:1;border:2px solid var(--stroke);border-radius:12px;padding:12px 14px;font-size:16px}
+button{background:var(--header);color:#ffe9f2;border:0;padding:12px 14px;border-radius:12px;font-weight:800;cursor:pointer}
+.results{max-width:1100px;margin:16px auto;padding:0 18px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--stroke);border-radius:16px;box-shadow:var(--shadow);padding:14px 16px}
+.card h3{margin:.2rem 0 .4rem;font-size:18px}
+.card p{margin:.2rem 0 .6rem;color:#5b2948}
+a.more{display:inline-block;margin-top:4px;color:#5b0f2d;font-weight:800}
+.tagbox{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.tag{background:var(--chip);color:var(--chipText);padding:6px 10px;border-radius:999px;border:1px solid #ffc1da;font-size:12px;font-weight:700}
+@media (max-width:720px){.results{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="header"><div class="header__in">
+  <div class="title">🔎 Site İçi Arama</div>
+  <a href="recipes.html" style="margin-left:auto;color:#ffe9f2;text-decoration:none;font-weight:700">🍰 Tarifler</a>
+  <a href="index.html" style="color:#ffe9f2;text-decoration:none;font-weight:700">🏠 Ana Menü</a>
+</div></header>
+
+<section class="search">
+  <div class="searchbar">
+    <input id="q" type="search" placeholder="Ne aramıştın? Örn: revani tatlısı, sütlü tatlı..." />
+    <button id="go">Ara</button>
+  </div>
+  <div style="margin-top:8px;color:#7a4b65;font-size:13px">İpucu: “revani”, “şerbet”, “portakallı”, “kolay” gibi kelimelerle ara.</div>
+</section>
+
+<section class="results" id="results"></section>
+
+<script>
+/* Basit veri indeksi (tarifler) */
+const DATA = [
+  {
+    type:"recipe",
+    title:"Anne Usulü Revani (Tam Ölçü, Tam Kıvam)",
+    url:"recipe-revani-anne-usulu.html",
+    desc:"Yumuşacık dokulu, şerbeti tam çeken klasik revani.",
+    tags:["revani","şerbetli","klasik","tam ölçü","annesinin tarifi"]
+  },
+  {
+    type:"recipe",
+    title:"Sütlü Yumuşak Revani (Sünger Gibi)",
+    url:"recipe-revani-sutlu-yumusak.html",
+    desc:"Sütle zenginleştirilmiş, sünger gibi hafif bir revani.",
+    tags:["revani","sütlü","yumuşak","hafif"]
+  },
+  {
+    type:"recipe",
+    title:"Portakallı Revani (Misler Gibi Kokar)",
+    url:"recipe-revani-portakalli.html",
+    desc:"Portakal kabuğu & suyu ile ferah aromalı revani.",
+    tags:["revani","portakallı","kokusuyla","yumuşak"]
+  },
+  {
+    type:"recipe",
+    title:"İrmiksiz Kolay Portakallı Kek",
+    url:"recipes.html#kolay-portakalli-kek",
+    desc:"Revani değil ama portakal sevenlere pratik kek.",
+    tags:["kek","portakal","kolay"]
+  }
+];
+
+/* Arama */
+function search(q){
+  const term = q.trim().toLowerCase();
+  if(!term) return [];
+  return DATA.filter(it=>{
+    const hay = (it.title+" "+it.desc+" "+it.tags.join(" ")).toLowerCase();
+    return term.split(/\s+/).every(w=>hay.includes(w));
+  });
+}
+
+/* Sonuçları çiz */
+function render(list){
+  const el = document.getElementById("results");
+  el.innerHTML = "";
+  if(!list.length){
+    el.innerHTML = `<div class="card" style="grid-column:1/-1">Sonuç bulunamadı. Başka bir kelime dene.</div>`;
+    return;
+  }
+  list.forEach(it=>{
+    const card = document.createElement("article");
+    card.className = "card";
+    card.innerHTML = `
+      <h3>${it.title}</h3>
+      <p>${it.desc}</p>
+      <div class="tagbox">${it.tags.map(t=>`<span class="tag">#${t}</span>`).join("")}</div>
+      <a class="more" href="${it.url}">Tarife git →</a>
+    `;
+    el.appendChild(card);
+  });
+}
+
+/* UI: parametreden doldur, buton/enter çalıştır */
+const qInput = document.getElementById("q");
+const goBtn  = document.getElementById("go");
+function doSearch(){
+  const q = qInput.value;
+  const found = search(q);
+  render(found);
+  const url = new URL(location.href);
+  url.searchParams.set("q", q);
+  history.replaceState(null, "", url.toString());
+}
+goBtn.addEventListener("click", doSearch);
+qInput.addEventListener("keydown", e=>{ if(e.key==="Enter") doSearch(); });
+
+/* URL'den q al */
+const initQ = new URL(location.href).searchParams.get("q") || "";
+qInput.value = initQ || "revani tatlısı";
+doSearch();
+</script>
+</body>
+</html>
