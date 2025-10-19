@@ -1,208 +1,301 @@
-<!DOCTYPE html><html lang="tr">
+<!DOCTYPE html>
+<html lang="tr">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Canım Annem 💐</title>
+
+  <!-- Yazı tipleri -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
+
   <style>
-    /* ============ RENKLER ============ */
-    :root{
-      /* bordo sahne */
-      --bordo:#2b0e23;
-      --bordo-deep:#200818;
-      --pempe:#ffb3d1;
-      --pempe-2:#ffcae2;
-      --kemik:#fff4e8;
-      --gece:#0f0a0f;
-      --eflatun:#caa3ff;
-      --eflatun-parlak:#e6ccff;
-      --beyaz:#ffffff;
-    }/* ============ GENEL ============ */
-*{box-sizing:border-box}
-html,body{height:100%}
-body{
-  margin:0;
-  font-family:"Poppins", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  color:var(--kemik);
-  background: radial-gradient(1200px 800px at 20% 10%, #3b1830 0%, var(--bordo) 60%, var(--bordo-deep) 100%);
-  overflow-x:hidden;
-}
+  /* ============== RENKLER & TEMA ============== */
+  :root{
+    --bordo:#2b0e23;
+    --bordo-deep:#200818;
+    --pempe:#ffb3d1;
+    --kemik:#fff4e8;
+    --gece:#0f0a0f;
+    --eflatun:#caa3ff;
+    --eflatun-parlak:#e6ccff;
+    --paper:#fffdfd;
+    --ink:#2b0e23;
+    --header:#5b0f2d;
+    --header2:#450a23;
+    --chip:#ffd6e8;
+    --chipText:#5b0f2d;
+    --card:#ffffff;
+    --cardStroke:#f2c6da;
+    --cardShadow:0 10px 30px #8a0f3040;
+  }
 
-a{color:inherit;text-decoration:none}
+  /* ============== RESET ============== */
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    background:var(--bordo);
+    color:#fff;
+    font-family:Poppins, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    overflow:hidden; /* sahneler tam ekran */
+  }
 
-/* ============ ÜST MENÜ ============ */
-header{
-  position:fixed;
-  top:0;left:0;right:0;
-  z-index:50;
-  padding:12px 18px;
-  backdrop-filter:saturate(1.2) blur(8px);
-  background:linear-gradient(180deg, rgba(32,8,24,.55), rgba(32,8,24,.15) 70%, rgba(32,8,24,0));
-  border-bottom:1px solid rgba(255,255,255,.06);
-}
-.brand{
-  display:flex;align-items:center;gap:10px;
-  font-weight:800;letter-spacing:.5px;font-size:15px;
-}
-.brand .dot{width:8px;height:8px;border-radius:999px;background:var(--pempe);box-shadow:0 0 12px var(--pempe)}
+  /* ============== SAHNE ISKELETI ============== */
+  .scene{
+    position:absolute; inset:0;
+    display:grid; place-items:center;
+    opacity:0; pointer-events:none;
+    transition:opacity .5s ease;
+  }
+  .scene.show{ opacity:1; pointer-events:auto }
 
-nav{margin-left:auto}
-.bar{display:flex;align-items:center;gap:22px}
-.bar a{font-weight:600;opacity:.9}
-.bar a:hover{opacity:1;text-shadow:0 0 8px rgba(255,179,209,.6)}
+  /* ============== BEYAZ FLAŞ ============== */
+  .flash{position:fixed; inset:0; background:#fff; opacity:0; pointer-events:none}
+  .flash.fire{animation:flash .55s ease}
+  @keyframes flash{0%{opacity:0}20%{opacity:1}100%{opacity:0}}
 
-.navwrap{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:16px}
+  /* ============== 1) LOGO ============== */
+  #splash{
+    background:radial-gradient(1200px 1200px at 50% 35%, var(--bordo) 0 55%, var(--bordo-deep) 100%);
+  }
+  .logoWrap{
+    position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+    width:min(86vw,520px); aspect-ratio:1;
+    display:grid; place-items:center;
+  }
+  .circleBase{
+    position:absolute; inset:8%; border-radius:50%;
+    border:4px solid #fff; opacity:.9;
+    box-shadow:0 0 28px #ffffff50 inset, 0 0 20px #ff80bf20;
+  }
+  .ring{position:absolute; inset:0; border-radius:50%; pointer-events:none}
+  .ring::before,.ring::after{
+    content:""; position:absolute; inset:10%; border-radius:50%;
+    border-top:6px solid #ff9dc7; border-left:6px solid transparent; border-right:6px solid transparent; border-bottom:6px solid transparent;
+    filter:drop-shadow(0 0 10px #ff9dc7);
+  }
+  .ring::before{animation:ringA 5.5s linear infinite}
+  .ring::after{inset:18%; animation:ringB 5.5s linear infinite reverse}
+  @keyframes ringA{to{transform:rotate(360deg)}}
+  @keyframes ringB{to{transform:rotate(-360deg)}}
 
-/* ============ SAHNE ============ */
-.hero{
-  position:relative;
-  min-height:100svh;
-  display:grid;
-  place-items:center;
-  padding:96px 16px 24px;
-  isolation:isolate;
-}
+  .logoText{
+    position:relative; text-align:center; line-height:1.05;
+    font-family:Poppins, system-ui; color:#fff;
+    text-shadow:0 3px 12px #0008, 0 0 24px #ffd6ea90;
+  }
+  .logoText .line1{font-size:clamp(28px,7.2vw,46px); font-weight:900}
+  .logoText .line2{font-size:clamp(40px,10vw,64px); font-weight:900; letter-spacing:1px}
+  .logoText .flower{display:block; font-size:clamp(20px,6vw,28px); margin-top:6px}
 
-/* Baloncuk katmanı */
-.bubbles{position:absolute;inset:0;overflow:hidden;z-index:0;}
-.bubble{
-  position:absolute;border-radius:999px;opacity:.35;
-  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.9), rgba(255,255,255,.25) 45%, rgba(255,255,255,0) 60%);
-  filter: blur(0.2px);
-  animation: floatUp linear infinite;
-}
-@keyframes floatUp{
-  from{transform:translateY(20vh) scale(1)}
-  to{transform:translateY(-120vh) scale(1.1)}
-}
-/* Farklı boyut/hızlar */
-.b1{width:160px;height:160px;left:6%;animation-duration:26s}
-.b2{width:90px;height:90px;left:22%;animation-duration:19s;animation-delay:-5s;opacity:.28}
-.b3{width:200px;height:200px;left:40%;animation-duration:30s;opacity:.22}
-.b4{width:120px;height:120px;left:58%;animation-duration:24s;animation-delay:-8s}
-.b5{width:80px;height:80px;left:72%;animation-duration:16s;opacity:.30}
-.b6{width:150px;height:150px;left:86%;animation-duration:28s;animation-delay:-12s}
+  .spark{
+    position:absolute; width:10px; height:10px; border-radius:50%;
+    background: radial-gradient(circle, #fff 0 30%, transparent 40%);
+    filter: drop-shadow(0 0 8px #fff);
+    animation:spark 1.6s ease-in-out infinite;
+  }
+  .spark.s1{left:22%; top:28%}
+  .spark.s2{right:23%; bottom:26%; animation-delay:.6s}
+  @keyframes spark{0%,100%{transform:scale(.6); opacity:.5}50%{transform:scale(1.15); opacity:1}}
 
-/* ============ ORTA LOGO (SVG) ============ */
-.logo-wrap{position:relative;z-index:1;width:min(86vw,720px);aspect-ratio:1/1;}
-.logo-card{
-  position:absolute;inset:0;border-radius:28px;pointer-events:none;
-  background: radial-gradient(800px 520px at 75% 10%, rgba(255,179,209,.22), rgba(255,179,209,0) 70%),
-              radial-gradient(700px 600px at 20% 85%, rgba(202,163,255,.18), rgba(202,163,255,0) 60%);
-  box-shadow: 0 40px 120px rgba(0,0,0,.45) inset;
-  mask: radial-gradient(circle at 50% 50%, rgba(0,0,0,1) 62%, rgba(0,0,0,0) 63%);
-  opacity:.85
-}
+  #bubbles{position:absolute; inset:0; overflow:hidden; filter:drop-shadow(0 6px 8px #fff3)}
+  .bubble{
+    position:absolute; width:clamp(16px,6vw,28px); aspect-ratio:1; border-radius:50%;
+    background: radial-gradient(circle at 30% 30%, #ffffffcc 0 18%, #ffffff22 35%, transparent 60%),
+                radial-gradient(circle at 70% 70%, #ffffff11 0 50%, transparent 60%);
+    animation:float var(--dur) linear infinite; opacity:.7;
+  }
+  @keyframes float{
+    0%{transform:translate(var(--sx), var(--sy)) scale(1)}
+    50%{transform:translate(calc(var(--sx)-1px), calc(var(--sy)*-1)) scale(1.1)}
+    100%{transform:translate(var(--sx), var(--sy)) scale(1)}
+  }
 
-svg{width:100%;height:100%;display:block}
+  /* ============== 2) SLAYT ============== */
+  #slide{background:var(--gece); color:var(--eflatun)}
+  .sun{
+    position:absolute; width:230px; height:230px; right:6vw; top:8vh; pointer-events:none; opacity:.85;
+    background:radial-gradient(circle, #ffeab5 0 18%, #f8d992 19% 26%, #e2c57800 60%);
+    filter:blur(10px); animation:sunOrbit 22s ease-in-out infinite;
+  }
+  @keyframes sunOrbit{0%{transform:translate(10px,0)}50%{transform:translate(-18px,10px)}100%{transform:translate(10px,0)}}
 
-/* Metin stilleri */
-.titleCANIM{font-family:"Playfair Display", serif;font-weight:900;letter-spacing:1.2px}
-.titleANNEM{font-weight:800}
+  .dust{position:absolute; inset:0; pointer-events:none}
+  .dust span{
+    position:absolute; width:3px; height:3px; border-radius:50%;
+    background:radial-gradient(circle, #ffc6e6 0 60%, transparent 70%);
+    opacity:.85; animation:drift var(--t) linear infinite;
+  }
+  @keyframes drift{from{transform:translateY(0)} to{transform:translateY(-120vh)}}
 
-/* Alt bilgi */
-footer{color:#f7e9ff;opacity:.8;text-align:center;padding:30px 12px}
+  .slideWrap{position:absolute; inset:0; display:grid; align-items:end; padding:6vh 5vw 5vh}
+  .slideText{
+    width:100%; text-align:center; line-height:1.32;
+    font-family:"Playfair Display", serif; font-weight:900;
+    color:var(--eflatun); text-shadow:0 0 22px #a061ff55, 0 2px 0 #0006;
+    font-size:clamp(36px, 10vw, 110px); letter-spacing:.5px;
+    transform:translateY(100%); animation:rise 60s linear forwards;  /* 60 sn kayış */
+  }
+  @keyframes rise{to{transform:translateY(-110%)}}
 
-/* Küçük ekran menü uyarlaması */
-@media (max-width:720px){
-  .bar{gap:14px}
-  .bar a{font-size:14px}
-}
+  .skip{
+    position:absolute; top:10px; left:10px;
+    background:#0007; color:#fff; border:1px solid #fff3; padding:6px 10px;
+    border-radius:12px; font-size:13px; z-index:1000; cursor:pointer;
+  }
 
+  /* ============== 3) MENÜ ============== */
+  #menu{background:var(--paper); color:var(--ink)}
+  .menuBar{
+    position:sticky; top:0; background:linear-gradient(180deg, var(--header), var(--header2));
+    color:#ffe9f2; box-shadow:0 6px 18px #450a2340; width:100%;
+  }
+  .menuBar__inner{max-width:1100px; margin:0 auto; padding:18px; display:flex; justify-content:center}
+  .menuBar__title{font-weight:900; letter-spacing:.6px; text-shadow:0 0 18px #ff9dc7; font-size:clamp(22px,5.6vw,32px)}
+  .menuWrap{max-width:1100px; margin:18px auto 36px; padding:0 18px}
+  .quick{display:flex; flex-wrap:wrap; gap:10px; margin:8px 0 18px}
+  .chip{background:var(--chip); color:var(--chipText); padding:10px 14px; border-radius:999px; border:1px solid #ffc1da; font-weight:700}
+  .panels{display:grid; gap:18px; grid-template-columns:repeat(2,minmax(0,1fr))}
+  .panel{
+    background:var(--card); border:1px solid var(--cardStroke); border-radius:18px;
+    box-shadow:var(--cardShadow); overflow:hidden; text-decoration:none; color:inherit; transition:transform .12s ease
+  }
+  .panel:active{transform:scale(.985)}
+  .panel__head{display:flex; gap:12px; align-items:center; padding:16px 18px; border-bottom:1px dashed #f3c7da; font-weight:800; font-size:clamp(18px,4.6vw,24px)}
+  .panel__body{padding:14px 18px; color:#5b2948; font-size:clamp(14px,3.6vw,17px)}
+  .panel--full{grid-column:1/-1}
+  .menuFooter{margin-top:24px; text-align:center; color:#8a5575; font-size:13px}
+  @media (max-width:680px){ .panels{grid-template-columns:1fr} .panel--full{grid-column:auto} }
   </style>
 </head>
+
 <body>
-  <!-- Üst Menü -->
-  <header>
-    <div class="navwrap">
-      <div class="brand"><span class="dot"></span> Canım Annem</div>
-      <nav>
-        <div class="bar">
-          <a href="#ana">Ana Sayfa</a>
-          <a href="#hikaye">Hikâye</a>
-          <a href="#galeri">Galeri</a>
-          <a href="#iletisim">İletişim</a>
-        </div>
-      </nav>
+
+  <!-- Beyaz flaş -->
+  <div class="flash" id="flash"></div>
+
+  <!-- 1) LOGO SAHNESİ -->
+  <section id="splash" class="scene show" aria-label="Logo">
+    <div id="bubbles"></div>
+    <div class="logoWrap">
+      <div class="circleBase"></div>
+      <div class="ring"></div>
+      <div class="logoText">
+        <div class="line1">Canım</div>
+        <div class="line2">Annem</div>
+        <span class="flower">🌸</span>
+      </div>
+      <div class="spark s1"></div>
+      <div class="spark s2"></div>
     </div>
-  </header>  <!-- Sahne -->  <section class="hero" id="ana">
-    <!-- Baloncuklar -->
-    <div class="bubbles" aria-hidden="true">
-      <div class="bubble b1"></div>
-      <div class="bubble b2"></div>
-      <div class="bubble b3"></div>
-      <div class="bubble b4"></div>
-      <div class="bubble b5"></div>
-      <div class="bubble b6"></div>
-    </div><div class="logo-wrap">
-  <!-- İç halka, yazılar, kesik pembe yaylar ve parlak noktalar: SVG -->
-  <svg viewBox="0 0 1000 1000" role="img" aria-label="Canım Annem halkalı logo">
-    <defs>
-      <radialGradient id="ringGlow" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="#ffe3f1" stop-opacity=".95"/>
-        <stop offset="55%" stop-color="#ffc7de" stop-opacity=".55"/>
-        <stop offset="85%" stop-color="#ff8fc0" stop-opacity=".12"/>
-        <stop offset="100%" stop-color="#ff8fc0" stop-opacity="0"/>
-      </radialGradient>
-      <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
-        <feGaussianBlur stdDeviation="6"/>
-      </filter>
-      <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-        <feGaussianBlur stdDeviation="18" result="b"/>
-        <feMerge>
-          <feMergeNode in="b"/>
-          <feMergeNode in="SourceGraphic"/>
-        </feMerge>
-      </filter>
-    </defs>
+  </section>
 
-    <!-- Dıştaki üç pembe kesik yay (farklı yarıçap ve uzunluklar) -->
-    <g stroke="#ffb3d1" stroke-width="8" fill="none" stroke-linecap="round" opacity=".8">
-      <!-- yay 1 -->
-      <path d="M 160 330 A 360 360 0 0 1 420 140" stroke-dasharray="36 38"/>
-      <!-- yay 2 (daha uzak) -->
-      <path d="M 120 560 A 420 420 0 0 1 320 220" stroke-dasharray="44 40"/>
-      <!-- yay 3 (en uzak ve kısa) -->
-      <path d="M 720 200 A 480 480 0 0 0 900 460" stroke-dasharray="30 54"/>
-    </g>
+  <!-- 2) SLAYT SAHNESİ -->
+  <section id="slide" class="scene" aria-label="Slayt Yazı">
+    <div class="sun"></div>
+    <div class="dust" id="dust"></div>
+    <button class="skip" id="skipSlide" aria-label="Yazıyı geç">Yazıyı Geç</button>
+    <div class="slideWrap">
+      <div class="slideText" id="slideText">
+        ANNE; <br>
+        SENİN GÜLÜŞÜNLE BAŞLIYOR GÜNÜM, <br>
+        SENİN SESİNLE SAKİNLEŞİYOR KALBİM. <br>
+        DÜNYA KARIŞSA DA, SENİN VARLIĞIN HER ŞEYİ DÜZENE SOKUYOR. <br>
+        KÜÇÜK BİR BAKIŞIN, EN ZOR ANIMDA UMUT OLUYOR. <br>
+        ELİNİN SICAKLIĞI, BİR EVİ DEĞİL, BİR HAYATI ISITIYOR. <br><br>
+        SEN YORGUN DÜŞSEN DE, GÜCÜNÜ SEVGİDEN ALIYORSUN. <br>
+        HER ADIMIMDA SENİN EMEĞİN, HER NEFESİMDE SENİN DUANI TAŞIYORUM. <br>
+        BEN NE KADAR BÜYÜSEM DE, SENİN YANINDA HÂLÂ O KÜÇÜK ÇOCUĞUM. <br><br>
+        KALBİMİN EN DERİNİNDE SENİN KOKUN VAR, <br>
+        O KOKU, DÜNYADAKİ HER ŞEYE BEDEN. <br>
+        İYİ Kİ VARSIN ANNE… <br>
+        İYİ Kİ SENİN EVLADINIM
+      </div>
+    </div>
+  </section>
 
-    <!-- İç ana halka -->
-    <circle cx="500" cy="500" r="300" fill="url(#ringGlow)" filter="url(#soft)"/>
-    <circle cx="500" cy="500" r="300" fill="none" stroke="#ffd7e8" stroke-width="3" opacity=".85"/>
+  <!-- 3) ANA MENÜ -->
+  <section id="menu" class="scene" aria-label="Ana Menü">
+    <div class="menuBar"><div class="menuBar__inner">
+      <div class="menuBar__title">💖 Ana Menü 💖</div>
+    </div></div>
 
-    <!-- Halkanın üstünde iki parlak nokta (kuyruklu yıldız etkisi) -->
-    <g filter="url(#glow)">
-      <circle cx="680" cy="360" r="5" fill="#ffffff"/>
-      <circle cx="690" cy="350" r="2.5" fill="#fff"/>
-      <path d="M 650 390 C 670 370, 690 355, 710 340" stroke="#ffe9f4" stroke-width="2" fill="none" opacity=".9"/>
-    </g>
+    <div class="menuWrap">
+      <div class="quick">
+        <span class="chip">＋ Fotoğraf ekle</span>
+        <span class="chip">📝 Yeni not</span>
+        <span class="chip">🍰 Favori tarif</span>
+        <span class="chip">📌 Hatırlatma</span>
+      </div>
+      <div class="panels">
+        <a class="panel" href="#"><div class="panel__head">📸 Anılar</div><div class="panel__body">Zaman yolculuğu — güzel kareler, özel günler.</div></a>
+        <a class="panel" href="#"><div class="panel__head">🍰 Tarifler</div><div class="panel__body">Lezzet defteri — sevdiğin tatlar hep yanında.</div></a>
+        <a class="panel" href="#"><div class="panel__head">💬 Notlarım</div><div class="panel__body">Kalpten cümleler — sana yazdıklarım.</div></a>
+        <a class="panel" href="#"><div class="panel__head">🌹 Bugün Mesaj</div><div class="panel__body">Bir tebessüm — küçük sürpriz mesaj.</div></a>
+        <a class="panel" href="#"><div class="panel__head">💗 Sağlık & Esenlik</div><div class="panel__body">Su, yürüyüş, nefes — minik hatırlatıcılar.</div></a>
+        <a class="panel" href="#"><div class="panel__head">🛒 Alışveriş Listem</div><div class="panel__body">Eksikler — tek dokunuşla ekle/sil.</div></a>
+        <a class="panel panel--full" href="#"><div class="panel__head">ℹ️ Hakkında</div><div class="panel__body">Bu küçük sitenin hikâyesi ve sana özel not.</div></a>
+      </div>
+      <div class="menuFooter">Sevgiyle hazırlandı • ©️</div>
+    </div>
+  </section>
 
-    <!-- Metinler -->
-    <g text-anchor="middle" fill="#fff" dominant-baseline="middle">
-      <text x="500" y="470" font-size="112" class="titleCANIM">CANIM</text>
-      <text x="500" y="560" font-size="70" class="titleANNEM">ANNEM💐</text>
-    </g>
-  </svg>
-
-  <!-- halkayı vurgulayan kart efekti (dış alanı koyulaştırıp içi görünür kılan maske) -->
-  <div class="logo-card" aria-hidden="true"></div>
-</div>
-
-  </section>  <!-- Basit bölümler (menü linkleri çalışsın diye yer tutucu) -->  <section id="hikaye" style="max-width:900px;margin:40px auto 0;padding:24px 16px;line-height:1.8">
-    <h2 style="font-family:'Playfair Display',serif;font-size:38px;margin:0 0 8px">Hikâye</h2>
-    <p style="opacity:.9">Bu bölümde annen için yazmak istediğin metni ekleyebilirsin. Kısa bir tanıtım, anılar veya fotoğrafların hikâyesi…</p>
-  </section>  <section id="galeri" style="max-width:1100px;margin:8px auto 0;padding:24px 16px">
-    <h2 style="font-family:'Playfair Display',serif;font-size:38px;margin:0 0 8px">Galeri</h2>
-    <p style="opacity:.9">Buraya görseller eklenecek. İstersen grid düzeni kurabilirim.</p>
-  </section>  <section id="iletisim" style="max-width:900px;margin:8px auto 40px;padding:24px 16px">
-    <h2 style="font-family:'Playfair Display',serif;font-size:38px;margin:0 0 8px">İletişim</h2>
-    <p style="opacity:.9">E-posta veya sosyal medya bağlantıları için alan.</p>
-  </section>  <footer>© <span id="yil"></span> Canım Annem — sevgiyle hazırlandı.</footer>
+  <!-- ========== SCRIPT ========== -->
   <script>
-    // Yıl yaz
-    document.getElementById('yil').textContent = new Date().getFullYear();
+  /* Yardımcılar */
+  const qs = s => document.querySelector(s);
+  const qsa = s => Array.from(document.querySelectorAll(s));
+  const show = sel => { qsa('.scene').forEach(el=>el.classList.remove('show')); qs(sel).classList.add('show'); };
+  const flash = ()=>{ const f=qs('#flash'); f.classList.add('fire'); setTimeout(()=>f.classList.remove('fire'), 550); };
+
+  /* Logo baloncukları */
+  (function makeBubbles(){
+    const wrap = qs('#bubbles'); const N = 22;
+    for(let i=0;i<N;i++){
+      const b = document.createElement('i');
+      b.className='bubble';
+      b.style.left = Math.random()*100 + '%';
+      b.style.top  = Math.random()*100 + '%';
+      b.style.setProperty('--sx', (Math.random()*80-40)+'px');
+      b.style.setProperty('--sy', (Math.random()*80-40)+'px');
+      b.style.setProperty('--dur',(10+Math.random()*12)+'s');
+      wrap.appendChild(b);
+    }
+  })();
+
+  /* Slayt tozu */
+  (function makeDust(){
+    const d = qs('#dust'); const N = 140;
+    for(let i=0;i<N;i++){
+      const s = document.createElement('span');
+      s.style.left = Math.random()*100 + '%';
+      s.style.top  = Math.random()*100 + '%';
+      s.style.opacity = (0.5+Math.random()*0.5);
+      s.style.setProperty('--t',(12+Math.random()*22)+'s');
+      d.appendChild(s);
+    }
+  })();
+
+  /* Akış kontrolü */
+  let firstLoad = true; // sadece ilk açılışta true
+
+  function startSlide(){ flash(); show('#slide'); }
+  function toMenu(){ flash(); show('#menu'); firstLoad = false; }
+
+  // diğer sayfalardan geri dön tuşlarının çağıracağı helper:
+  function goBackToMenu(){ flash(); show('#menu'); }
+
+  /* Akış: splash → slayt → menü (ilk açılışta) */
+  setTimeout(startSlide, 3600);                      // 3.6 sn sonra slayt
+  qs('#slideText').addEventListener('animationend', toMenu);  // yazı bitince menü
+  qs('#skipSlide').addEventListener('click', toMenu);         // Yazıyı Geç → menü
+
+  /* Başlangıç ekranı */
+  show('#splash');
+
+  // goBackToMenu'yu global yapmak için:
+  window.goBackToMenu = goBackToMenu;
   </script>
 </body>
-</html>
+  </html>
