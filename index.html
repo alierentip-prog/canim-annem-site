@@ -412,6 +412,17 @@
 </head>
 
 <body>
+  <!-- Arka plan müziği (tek sefer çalar) -->
+<audio id="bgm" src="assets/music.mp3" preload="auto" playsinline></audio>
+
+<!-- Otomatik çalma engellenirse görünecek buton -->
+<button id="bgm-ctl" style="display:none;
+position:fixed;left:50%;bottom:18px;transform:translateX(-50%);
+background:#5b0f2d;color:#ffe9f2;border:1px solid #ffc1da;
+padding:10px 14px;border-radius:999px;font-weight:800;
+box-shadow:0 6px 18px #450a2340;z-index:10000">
+▶️ Müziği başlat
+</button>
 
   <!-- ===================================================== -->
   <!-- BEYAZ FLAŞ -->
@@ -640,6 +651,40 @@
 
     // başlangıç sahnesi
     show('#splash');
+    // MP3: otomatik çal ve sadece bir kez
+(function(){
+  const audio = document.getElementById('bgm');
+  const btn   = document.getElementById('bgm-ctl');
+  if(!audio) return;
+
+  // Aynı sekmede sadece bir kez çalsın
+  if (sessionStorage.getItem('bgmPlayed') === '1') return;
+
+  // Otomatik çalmayı dene
+  audio.play().then(()=>{
+    sessionStorage.setItem('bgmPlayed','1');
+  }).catch(()=>{
+    // Otomatik çalma engellendiyse: ilk etkileşimde başlat
+    btn.style.display = 'block';
+    const kick = async ()=>{
+      try {
+        await audio.play();
+        sessionStorage.setItem('bgmPlayed','1');
+      } finally {
+        btn.style.display = 'none';
+        window.removeEventListener('click', kick);
+        window.removeEventListener('touchstart', kick);
+      }
+    };
+    btn.addEventListener('click', kick);
+    window.addEventListener('click', kick);
+    window.addEventListener('touchstart', kick);
+  });
+
+  // Tek sefer çalsın, bittiğinde dur
+  audio.loop = false;
+  audio.addEventListener('ended', ()=>{ audio.currentTime = 0; });
+})();
   </script>
 
 </body>
