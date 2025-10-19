@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bugünün Mesajı | Canım Annem</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@800;900&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#2b0f23}
+*{box-sizing:border-box} body{margin:0;background:#0f0a0f;color:#e6ccff;font-family:Poppins,system-ui}
+.wrap{max-width:900px;margin:0 auto;padding:24px}
+h1{font-family:"Playfair Display",serif;text-align:center}
+.card{background:#1a1320;border:1px solid #3f2d57;border-radius:16px;padding:18px;box-shadow:0 10px 30px #0006}
+.meta{color:#bda7ff;font-size:13px;margin-top:10px;text-align:center}
+a{color:#ffd6e8}
+</style></head>
+<body>
+<div class="wrap">
+  <a href="index.html">← Ana Menü</a>
+  <h1>🌹 Bugünün Mesajı</h1>
+  <div id="msg" class="card" style="font-size:22px;font-weight:800;line-height:1.5;text-align:center"></div>
+  <div id="meta" class="meta"></div>
+</div>
+
+<script>
+const MESSAGES = [
+ "Gülüşün evimin güneşi, sesin kalbimin ritmi.",
+ "Kahramanım oldun; pelerin yerine sabır ve şefkat giydin.",
+ "Dünyanın en güzel kokusu: Senin kokun.",
+ "Yorgunluğuna çay demledim: İsmi huzur.",
+ "Attığım her adımda duan var, düşersem elin.",
+ "Bir bakışınla dağınık içim toplanır.",
+ "İyi ki varsın annem. Varlığın düzen, sesin sükûn.",
+ "Bugün bir tebessüm benden sana: Sebebi sensin.",
+ "Ellerinin sıcaklığı bir evi değil, bir hayatı ısıtır.",
+ "Kalbimin en güvenli adresi sensin.",
+ "Küçükken tuttuğun elim büyüdü; artık ben tutayım.",
+ "Bir teşekkür kâfi değil, bir ömür yetmez.",
+ "Her başarıma görünmez bir imza atıyorsun: 'Annem'.",
+ "İçimdeki cesaretin adı sensin.",
+ "Gözlerin huzur, sözlerin şifa.",
+ "Mutfağının ışığı sönmesin, muhabbetin hiç eksilmesin.",
+ "Ben büyüdüm ama sarılınca yine küçüğün oluyorum.",
+ "Rüzgâr esse siper olan kalbin var.",
+ "Dünya karışsa da, senin varlığın düzen verir.",
+ "Bugün de iyi ki varsın…"
+];
+
+const tz = "Europe/Istanbul";
+function todayIndex(){
+  // YYYY-MM-DD -> bir hash yerine gün sayısını mod'a al
+  const now = new Date();
+  const fmt = new Intl.DateTimeFormat('tr-TR',{timeZone:tz,year:'numeric',month:'2-digit',day:'2-digit'});
+  const parts = fmt.formatToParts(now).reduce((a,p)=>{a[p.type]=p.value;return a;}, {});
+  const key = `${parts.year}${parts.month}${parts.day}`;
+  let n = 0; for(const ch of key) n = (n*33 + ch.charCodeAt(0)) % 100000;
+  return n % MESSAGES.length;
+}
+
+function nextMidnightMS(){
+  // İstanbul'da bir sonraki 00:00
+  const now = new Date();
+  const nowStr = now.toLocaleString('en-CA',{timeZone:tz,hour12:false}); // "YYYY-MM-DD, HH:MM:SS"
+  const [datePart,timePart] = nowStr.split(", ");
+  const [Y,M,D] = datePart.split("-").map(Number);
+  const next = new Date(Date.UTC(Y, M-1, D+1, 0,0,0));
+  // yerel offseti hesaba katmadan timeout milli saniyesi:
+  return next.getTime() - now.getTime();
+}
+
+function render(){
+  const i = todayIndex();
+  document.getElementById("msg").textContent = MESSAGES[i];
+  const left = nextMidnightMS();
+  const hrs = Math.floor(left/3600000), mins = Math.floor((left%3600000)/60000);
+  document.getElementById("meta").textContent = `Mesaj İstanbul saatine göre her gün 00:00'da değişir. Kalan: ~${hrs} saat ${mins} dk.`;
+}
+render();
+// gece yarısında yenile
+setTimeout(()=>location.reload(), nextMidnightMS()+2000);
+</script>
+</body>
+</html>
