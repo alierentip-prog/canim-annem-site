@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sağlık & Esenlik | Canım Annem</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@800;900&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#2b0f23; --stroke:#f2c6da}
+*{box-sizing:border-box} body{margin:0;background:#fff8fb;color:var(--ink);font-family:Poppins,system-ui}
+.wrap{max-width:980px;margin:0 auto;padding:18px}
+h1{font-family:"Playfair Display",serif}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.card{background:#fff;border:1px solid var(--stroke);border-radius:16px;padding:14px 16px;box-shadow:0 10px 30px #8a0f3040}
+.check li{margin:.4rem 0}
+.breath{height:180px;display:grid;place-items:center;background:#2b0f2320;border-radius:14px}
+.circ{width:120px;height:120px;border-radius:50%;border:3px solid #5b0f2d;animation:breath 8s ease-in-out infinite}
+@keyframes breath{0%{transform:scale(.75)}50%{transform:scale(1.1)}100%{transform:scale(.75)}}
+@media (max-width:720px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a href="index.html">← Ana Menü</a>
+  <h1>💗 Sağlık & Esenlik</h1>
+
+  <div class="grid">
+    <section class="card">
+      <h3>Günlük Kontrol Listesi</h3>
+      <ul class="check">
+        <li>💧 6–8 bardak su</li>
+        <li>🚶 20–30 dk yürüyüş</li>
+        <li>🍽️ 3 ana + 1 hafif ara öğün</li>
+        <li>🛌 7–8 saat uyku rutini</li>
+        <li>📱 Ekran molaları (20-20-20 kuralı)</li>
+        <li>😊 5 dakika şükür/nefes</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h3>Mini Nefes Egzersizi (4–4–6)</h3>
+      <div class="breath"><div class="circ"></div></div>
+      <p>4 sn nefes al — 4 sn tut — 6 sn ver. Balon gibi genişle–daral hissi için halka animasyonunu takip edebilirsin.</p>
+    </section>
+
+    <section class="card">
+      <h3>Su Hatırlatıcısı</h3>
+      <p>Günün şu anına göre öneri:</p>
+      <p id="water"></p>
+    </section>
+
+    <section class="card">
+      <h3>İyi Hissettirir</h3>
+      <ul class="check">
+        <li>🎵 2 şarkı boyunca sadece müzik</li>
+        <li>🌞 10 dk gün ışığı (balkon/pencere)</li>
+        <li>📗 5 sayfa okuma</li>
+        <li>📞 Sevdiğin biriyle kısa bir hâl-hatır</li>
+      </ul>
+    </section>
+  </div>
+</div>
+
+<script>
+(function(){
+  const hour = new Date().getHours();
+  let tip = "Gün boyu yanından suyu eksik etme. Küçük yudumlar en iyisi.";
+  if(hour < 11) tip = "Güne bir bardak ılık suyla başlamak harika! Şimdi 1 bardak iç.";
+  else if(hour < 16) tip = "Öğle sonrası hafif yorgunluk? Bir bardak su ve 3 derin nefes iyi gelir.";
+  else if(hour < 20) tip = "Akşamüstü susuzluğu hissetmeden su iç. Hedef: 2 bardak.";
+  else tip = "Gece yatmadan önce küçük bir yudum su yeterli. Fazlası uykunu bölebilir.";
+  document.getElementById("water").textContent = tip;
+})();
+</script>
+</body>
+</html>
