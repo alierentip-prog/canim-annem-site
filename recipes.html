@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tarifler | Canım Annem</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@800;900&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#2b0f23; --head:#5b0f2d; --paper:#fffdfd; --stroke:#f2c6da; --shadow:0 10px 30px #8a0f3040}
+*{box-sizing:border-box} body{margin:0;background:#fff8fb;color:var(--ink);font-family:Poppins,system-ui}
+.top{background:linear-gradient(180deg,var(--head),#450a23);color:#ffe9f2;padding:18px}
+.wrap{max-width:1100px;margin:0 auto;padding:0 18px}
+h1{font-family:"Playfair Display",serif;margin:0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:16px 0}
+.card{background:#fff;border:1px solid var(--stroke);box-shadow:var(--shadow);border-radius:16px;padding:14px 16px}
+.card h3{margin:.2rem 0 .5rem}
+a.btn{display:inline-block;background:#5b0f2d;color:#ffe9f2;padding:10px 14px;border-radius:12px;text-decoration:none;font-weight:800}
+.searchbar{display:flex;gap:8px;margin-top:10px}
+.searchbar input{flex:1;border:2px solid var(--stroke);border-radius:12px;padding:10px 12px}
+.searchbar a{background:#5b0f2d;color:#ffe9f2;padding:10px 14px;border-radius:12px;font-weight:800;text-decoration:none}
+@media (max-width:720px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="top"><div class="wrap">
+  <h1>🍰 Tarifler</h1>
+  <div class="searchbar">
+    <input id="q" placeholder="Örn: revani, sütlü tatlı, portakallı..." />
+    <a id="go" href="#">Ara</a>
+    <a href="index.html" style="margin-left:auto;color:#ffe9f2;text-decoration:none;font-weight:700">🏠 Ana Menü</a>
+  </div>
+</div></div>
+
+<div class="wrap">
+  <h3>Öne Çıkanlar</h3>
+  <div class="grid">
+    <article class="card">
+      <h3>Anne Usulü Revani</h3>
+      <p>Yumuşacık, tam ölçülü klasik revani.</p>
+      <a class="btn" href="recipe-revani-anne-usulu.html">Tarife git</a>
+    </article>
+    <article class="card">
+      <h3>Sütlü Yumuşak Revani</h3>
+      <p>Sütle zenginleştirilmiş, sünger gibi.</p>
+      <a class="btn" href="recipe-revani-sutlu-yumusak.html">Tarife git</a>
+    </article>
+    <article class="card">
+      <h3>Portakallı Revani</h3>
+      <p>Ferah aroma, mis gibi koku.</p>
+      <a class="btn" href="recipe-revani-portakalli.html">Tarife git</a>
+    </article>
+    <article class="card" id="kolay-portakalli-kek">
+      <h3>Kolay Portakallı Kek</h3>
+      <p>Pratik ve yumuşacık kek (irmiksiz).</p>
+      <a class="btn" href="recipes.html#kolay-portakalli-kek">Detay</a>
+    </article>
+  </div>
+</div>
+
+<script>
+document.getElementById("go").addEventListener("click", (e)=>{
+  e.preventDefault();
+  const q = document.getElementById("q").value.trim();
+  location.href = "search.html?q="+encodeURIComponent(q||"revani tatlısı");
+});
+</script>
+</body>
+</html>
