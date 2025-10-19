@@ -41,7 +41,7 @@
     background:var(--bordo);
     color:#fff;
     font-family:Poppins, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-    overflow:hidden;
+    overflow:hidden; /* sahneler tam ekran */
   }
 
   .scene{
@@ -67,10 +67,9 @@
     background:#fff;
     opacity:0;
     pointer-events:none;
+    z-index:9999;
   }
-  .flash.fire{
-    animation:flash .55s ease;
-  }
+  .flash.fire{ animation:flash .55s ease; }
   @keyframes flash {
     0%{opacity:0}
     20%{opacity:1}
@@ -173,14 +172,15 @@
     width:clamp(16px,6vw,28px);
     aspect-ratio:1/1;
     border-radius:50%;
-    background: radial-gradient(circle at 30% 30%, #ffffffcc 0 18%, #ffffff22 35%, transparent 60%),
-                radial-gradient(circle at 70% 70%, #ffffff11 0 50%, transparent 60%);
+    background:
+      radial-gradient(circle at 30% 30%, #ffffffcc 0 18%, #ffffff22 35%, transparent 60%),
+      radial-gradient(circle at 70% 70%, #ffffff11 0 50%, transparent 60%);
     animation:float var(--dur) linear infinite;
     opacity:.7;
   }
   @keyframes float {
     0%{transform:translate(var(--sx), var(--sy)) scale(1)}
-    50%{transform:translate(calc(var(--sx)-1), calc(var(--sy)*-1)) scale(1.1)}
+    50%{transform:translate(calc(var(--sx) - 1px), calc(var(--sy) * -1)) scale(1.08)}
     100%{transform:translate(var(--sx), var(--sy)) scale(1)}
   }
 
@@ -190,6 +190,7 @@
   #slide{
     background:var(--gece);
     color:var(--eflatun);
+    place-items:stretch;
   }
 
   .sun{
@@ -207,10 +208,7 @@
     100%{transform:translate(10px, 0)}
   }
 
-  .dust{
-    position:absolute;
-    inset:0;
-  }
+  .dust{ position:absolute; inset:0; overflow:hidden; }
   .dust span{
     position:absolute;
     width:3px; height:3px;
@@ -261,7 +259,11 @@
   /* ============================================================
      3) MENÜ SAHNESİ
   ============================================================ */
-  #menu{background:var(--paper);color:var(--ink);}
+  #menu{
+    background:var(--paper); color:var(--ink);
+    align-items:start;
+    overflow:auto; /* menüde kaydırma */
+  }
   .menuBar{
     position:sticky;
     top:0;
@@ -269,6 +271,7 @@
     color:#ffe9f2;
     box-shadow:0 6px 18px #450a2340;
     width:100%;
+    z-index:10;
   }
   .menuBar__inner{
     max-width:1100px;
@@ -286,7 +289,7 @@
   .menuWrap{
     max-width:1100px;
     margin:18px auto 36px;
-    padding:0 18px;
+    padding:0 18px 40px;
   }
   .quick{
     display:flex;
@@ -352,26 +355,26 @@
   <div class="flash" id="flash"></div>
 
   <!-- 1) LOGO SAHNESİ -->
-  <section id="splash" class="scene show">
-    <div id="bubbles"></div>
+  <section id="splash" class="scene show" aria-label="Açılış">
+    <div id="bubbles" aria-hidden="true"></div>
     <div class="logoWrap">
       <div class="circleBase"></div>
       <div class="ring"></div>
-      <div class="logoText">
+      <div class="logoText" aria-label="Canım Annem">
         <div class="line1">Canım</div>
         <div class="line2">Annem</div>
-        <span class="flower">🌸</span>
+        <span class="flower" aria-hidden="true">🌸</span>
       </div>
-      <div class="spark s1"></div>
-      <div class="spark s2"></div>
+      <div class="spark s1" aria-hidden="true"></div>
+      <div class="spark s2" aria-hidden="true"></div>
     </div>
   </section>
 
   <!-- 2) SLAYT SAHNESİ -->
-  <section id="slide" class="scene">
-    <div class="sun"></div>
-    <div class="dust" id="dust"></div>
-    <button class="skip" id="skipSlide">Yazıyı Geç</button>
+  <section id="slide" class="scene" aria-label="Yazı slaytı">
+    <div class="sun" aria-hidden="true"></div>
+    <div class="dust" id="dust" aria-hidden="true"></div>
+    <button class="skip" id="skipSlide" type="button">Yazıyı Geç</button>
     <div class="slideWrap">
       <div class="slideText" id="slideText">
         ANNE; <br>
@@ -392,13 +395,13 @@
   </section>
 
   <!-- 3) MENÜ SAHNESİ -->
-  <section id="menu" class="scene">
+  <section id="menu" class="scene" aria-label="Ana menü">
     <div class="menuBar"><div class="menuBar__inner">
       <div class="menuBar__title">💖 Ana Menü 💖</div>
     </div></div>
 
     <div class="menuWrap">
-      <div class="quick">
+      <div class="quick" aria-label="Hızlı eylemler">
         <span class="chip">＋ Fotoğraf ekle</span>
         <span class="chip">📝 Yeni not</span>
         <span class="chip">🍰 Favori tarif</span>
@@ -421,8 +424,78 @@
 
   <!-- JAVASCRIPT -->
   <script>
-  const qs=s=>document.querySelector(s),qsa=s=>Array.from(document.querySelectorAll(s));
-  const show=id=>{qsa('.scene').forEach(el=>el.classList.remove('show'));qs(id).classList.add('show');};
-  const flash=()=>{const f=qs('#flash');f.classList.add('fire');setTimeout(()=>f.classList.remove('fire'),550);};
+  const qs = s => document.querySelector(s);
+  const qsa = s => Array.from(document.querySelectorAll(s));
+  const show = id => { qsa('.scene').forEach(el => el.classList.remove('show')); qs(id).classList.add('show'); };
+  const flash = () => { const f = qs('#flash'); f.classList.add('fire'); setTimeout(()=>f.classList.remove('fire'), 550); };
 
-  (function makeBubbles(){const w=qs('#bubbles');for(let i=0;i<22;i++){const b=document.createElement('i');b.className='bubble';b.style.left=Math.random()*100+'%';b.style.top=Math.random()*100+'%';b.style.setProperty('--sx',(Math.random()*80-40)+'px
+  /* Baloncukları üret */
+  function makeBubbles(){
+    const w = qs('#bubbles');
+    const N = 22;
+    for(let i=0;i<N;i++){
+      const b = document.createElement('i');
+      b.className = 'bubble';
+      b.style.left = Math.random()*100 + '%';
+      b.style.top  = Math.random()*100 + '%';
+      // rastgele salınım vektörleri (x,y) ve süre
+      const sx = (Math.random()*80 - 40).toFixed(1) + 'px';
+      const sy = (Math.random()*40 - 20).toFixed(1) + 'px';
+      const dur = (12 + Math.random()*16).toFixed(2) + 's';
+      b.style.setProperty('--sx', sx);
+      b.style.setProperty('--sy', sy);
+      b.style.setProperty('--dur', dur);
+      w.appendChild(b);
+    }
+  }
+
+  /* Slayt tozlarını üret */
+  function makeDust(){
+    const c = qs('#dust');
+    const N = 80;
+    for(let i=0;i<N;i++){
+      const s = document.createElement('span');
+      s.style.left = (Math.random()*100).toFixed(2) + '%';
+      s.style.bottom = (-10 + Math.random()*120).toFixed(0) + 'vh';
+      s.style.setProperty('--t', (10 + Math.random()*18).toFixed(2) + 's');
+      c.appendChild(s);
+    }
+  }
+
+  /* Akış kontrolü */
+  function goToSlide(){
+    flash();
+    setTimeout(()=>{ show('#slide'); }, 250);
+  }
+  function goToMenu(){
+    flash();
+    setTimeout(()=>{ show('#menu'); }, 250);
+  }
+
+  /* Etkileşim: slaytı geç */
+  function wireSkip(){
+    const skipBtn = qs('#skipSlide');
+    const slide   = qs('#slide');
+    const txt     = qs('#slideText');
+
+    const skip = () => goToMenu();
+    skipBtn.addEventListener('click', skip);
+    // ekrana dokunma/tıklama da geçsin
+    slide.addEventListener('click', skip, { passive:true });
+    slide.addEventListener('touchstart', skip, { passive:true });
+    // yazı animasyon bitince otomatik menüye
+    txt.addEventListener('animationend', skip);
+  }
+
+  /* Başlat */
+  document.addEventListener('DOMContentLoaded', ()=>{
+    makeBubbles();
+    makeDust();
+    wireSkip();
+
+    // 1) Splash -> 3 sn sonra slayt
+    setTimeout(goToSlide, 3000);
+  });
+  </script>
+</body>
+                                                </html>
